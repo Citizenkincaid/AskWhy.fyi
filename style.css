@@ -1100,3 +1100,57 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ── Spotlight redesign: portrait-left text-right ── */
+.spotlight {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.spotlight-portrait {
+  flex-shrink: 0;
+  width: 260px;
+  align-self: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: grayscale(15%) contrast(1.05);
+  border-right: 1px solid var(--gold);
+}
+
+.spotlight-body {
+  flex: 1;
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.spotlight-dates {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  opacity: .8;
+}
+
+@media (max-width: 860px) {
+  .spotlight { flex-direction: column; }
+  .spotlight-portrait { width: 100%; height: 260px; }
+  .spotlight-portrait img { border-right: none; border-bottom: 1px solid var(--gold); }
+  .spotlight-body { padding: 32px; }
+}
