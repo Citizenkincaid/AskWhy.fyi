@@ -1154,3 +1154,64 @@ footer {
   .spotlight-portrait img { border-right: none; border-bottom: 1px solid var(--gold); }
   .spotlight-body { padding: 32px; }
 }
+
+/* ── Mobile fixes ── */
+@media (max-width: 768px) {
+
+  /* Navbar — hide links, just logo + subscribe */
+  .navbar {
+    padding: 14px 20px;
+  }
+
+  .nav-links { display: none; }
+  .nav-search { display: none; }
+
+  .subscribe-btn {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+
+  /* Hero — tighten up, remove excess height */
+  .hero {
+    min-height: 100svh;
+    padding-left: 6%;
+    padding-right: 6%;
+    padding-bottom: 80px;
+    align-items: flex-end;
+    background-position: center center;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 14vw, 72px);
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    margin-bottom: 32px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-primary, .btn-secondary {
+    text-align: center;
+    padding: 14px 24px;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  /* Hide orbit rings on mobile */
+  .orbit { display: none; }
+
+  /* Scroll indicator */
+  .hero-scroll { display: none; }
+}
+
+/* Extra small phones */
+@media (max-width: 400px) {
+  .hero h1 { font-size: 42px; }
+}
