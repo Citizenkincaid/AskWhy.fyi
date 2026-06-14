@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oliver Heaviside — AskWhy.fyi</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+
+    /* ── Bio Header: portrait + text side by side ── */
+    .bio-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 56px;
+      padding: 140px 8% 72px;
+      border-bottom: 1px solid var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Portrait — contained, gold bordered */
+    .bio-portrait {
+      flex-shrink: 0;
+      width: 280px;
+    }
+
+    .bio-portrait img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--gold);
+      filter: grayscale(15%) contrast(1.05);
+      box-shadow: 0 0 0 4px rgba(201,168,76,.08), 0 20px 48px rgba(0,0,0,.5);
+    }
+
+    /* Right: all the text */
+    .bio-meta {
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .bio-dates {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .bio-name {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 5vw, 72px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.0;
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+    }
+
+    .bio-tagline {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--text-body);
+      margin-bottom: 24px;
+    }
+
+    .bio-intro {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      color: var(--text-body);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 620px;
+    }
+
+    .bio-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bio-tags .tag-pill {
+      background: rgba(201,168,76,.10);
+      border: 1px solid rgba(201,168,76,.30);
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 999px;
+    }
+
+    /* ── Article body ── */
+    .bio-article {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 80px 40px 80px;
+    }
+
+    .bio-article h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -.5px;
+      margin: 56px 0 18px;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .bio-article h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .bio-article p {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      color: var(--text-body);
+      line-height: 1.8;
+      margin-bottom: 22px;
+    }
+
+    .bio-article a {
+      color: var(--gold);
+      border-bottom: 1px solid rgba(201,168,76,.3);
+      transition: border-color .2s;
+    }
+    .bio-article a:hover { border-color: var(--gold); }
+
+    .bio-pullquote {
+      border-left: 3px solid var(--gold);
+      padding: 22px 32px;
+      margin: 48px 0;
+      background: var(--navy-card);
+      border-radius: 0 10px 10px 0;
+    }
+
+    .bio-pullquote p {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    /* ── Prev / Next nav ── */
+    .bio-footer-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+      padding: 40px 8%;
+      border-top: 1px solid var(--border);
+      margin-bottom: 80px;
+    }
+
+    .bio-nav-prev, .bio-nav-next { display: flex; flex-direction: column; gap: 5px; }
+    .bio-nav-next { align-items: flex-end; }
+
+    .bio-nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .bio-nav-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gold);
+      transition: color .2s;
+    }
+
+    .bio-nav-prev a:hover .bio-nav-name,
+    .bio-nav-next a:hover .bio-nav-name { color: var(--white); }
+
+    .bio-nav-badge {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .bio-header { flex-direction: column; padding: 120px 6% 56px; gap: 36px; }
+      .bio-portrait { width: 200px; }
+      .bio-article { padding: 60px 6%; }
+      .bio-footer-nav { padding: 32px 6%; }
+    }
+
+    @media (max-width: 560px) {
+      .bio-name { font-size: 40px; }
+      .bio-portrait { width: 160px; }
+      .bio-footer-nav { grid-template-columns: 1fr 1fr; }
+      .bio-nav-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
+    <ul class="nav-links">
+      <li><a href="hidden-figures.html">Explore</a></li>
+      <li><a href="innovation.html">Innovation</a></li>
+      <li><a href="hidden-figures.html" class="active">Hidden Figures</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="ask-why.html">Ask Why</a></li>
+    </ul>
+    <div class="nav-right">
+      <input class="nav-search" type="text" placeholder="Search pioneers…" />
+      <a href="index.html#newsletter" class="subscribe-btn">Subscribe</a>
+    </div>
+  </nav>
+
+  <!-- ── Header: portrait + text ── -->
+  <div class="bio-header">
+    <div class="bio-portrait">
+      <img src="images/heaviside.jpg" alt="Oliver Heaviside" />
+    </div>
+    <div class="bio-meta">
+      <p class="bio-dates">1850 — 1925 · London &amp; Devon, England</p>
+      <h1 class="bio-name">Oliver Heaviside</h1>
+      <p class="bio-tagline">The Man Who Rewrote Electricity</p>
+      <p class="bio-intro">He had no university degree, no laboratory, no institutional support. Working alone in rented rooms — often without heat — Oliver Heaviside reformulated the mathematics of electromagnetism, predicted the existence of the ionosphere, and invented a branch of mathematics now called operational calculus. The notation every electrical engineer uses today is his.</p>
+      <div class="bio-tags">
+        <span class="tag-pill">Electrical Engineering</span>
+        <span class="tag-pill">Mathematics</span>
+        <span class="tag-pill">Communications</span>
+        <span class="tag-pill">Innovation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Article ── -->
+  <div class="bio-article">
+
+    <h2>A Brilliant Mind in a Rented Room</h2>
+    <p>Oliver Heaviside was born in <a href="https://en.wikipedia.org/wiki/Camden_Town">Camden Town, London</a> in 1850, the youngest of four sons. His family was poor. His mother's brother was <a href="https://en.wikipedia.org/wiki/Charles_Wheatstone">Charles Wheatstone</a> — the inventor of the Wheatstone bridge and an early pioneer of telegraphy — and it was through this connection that Heaviside gained his only formal employment: five years as a telegraph operator in Newcastle. He resigned in 1874, aged 24, and never worked for an employer again.</p>
+    <p>For the next fifty years, Heaviside lived on small allowances from family, occasional payments from scientific journals, and later a modest civil list pension. He moved through a series of cramped lodgings, often cold, frequently ill, and in regular conflict with the editors and institutions he depended on to publish his work. He was difficult, eccentric, and frequently right.</p>
+
+    <h2>Maxwell's Equations, Made Usable</h2>
+    <p><a href="https://en.wikipedia.org/wiki/James_Clerk_Maxwell">James Clerk Maxwell</a> published his Treatise on Electricity and Magnetism in 1873, setting out the mathematical framework for electromagnetism in twenty equations using quaternion algebra — a notation so complex that few physicists could use it in practice. Heaviside spent the late 1870s and 1880s systematically simplifying Maxwell's framework, converting it into the vector calculus notation we use today, and reducing the twenty equations to the four that now bear Maxwell's name.</p>
+    <p>The irony — noted by Heaviside himself — was that Maxwell's equations, as taught in every physics department in the world, are not quite Maxwell's equations. They are Heaviside's reformulation of Maxwell's equations.</p>
+
+    <div class="bio-pullquote">
+      <p>"The unhappy theory of Maxwell has the fault of being so complex that it is very difficult to use."</p>
+    </div>
+
+    <h2>The Ionosphere and the Heaviside Layer</h2>
+    <p>In 1902, Heaviside proposed that there must exist a conducting layer in the upper atmosphere capable of reflecting radio waves back to Earth. This was necessary, he argued, to explain how Marconi's radio signals had crossed the Atlantic in 1901 — something that should have been impossible if radio waves travelled only in straight lines. The layer was confirmed experimentally in the 1920s, and is now known as the ionosphere. For most of the twentieth century it was called the Kennelly–Heaviside layer.</p>
+
+    <h2>The Operational Calculus</h2>
+    <p>Heaviside also developed a set of techniques — which he called operational calculus — for solving differential equations by treating the differential operator as an algebraic quantity. His methods worked, and engineers used them widely. Mathematicians spent decades trying to provide rigorous foundations for techniques they could not initially justify. The Laplace transform, which is now the standard approach, was eventually shown to be equivalent to Heaviside's operations.</p>
+
+    <h2>Recognition, Withheld and Late</h2>
+    <p>The Royal Society refused to publish Heaviside's papers for years. The Institution of Electrical Engineers elected him an honorary member in 1908 — an honour that came with no income. He was nominated for the Nobel Prize but never received it. In his final years he became increasingly reclusive, replacing furniture with granite blocks, signing letters "W.O.R.M." and "Devil," and dying in 1925 with few who knew his name.</p>
+    <p>Every time you write down ∇×E = −∂B/∂t, you are writing Heaviside's notation, not Maxwell's. It is a kind of immortality that history has not troubled to acknowledge.</p>
+
+  </div>
+
+  <!-- ── Prev / Next ── -->
+  <div class="bio-footer-nav">
+    <div class="bio-nav-prev">
+      <a href="hidden-figures.html">
+        <span class="bio-nav-label">← Back to</span>
+        <span class="bio-nav-name">Hidden Figures</span>
+      </a>
+    </div>
+    <span class="bio-nav-badge">1 of 5 Pioneers</span>
+    <div class="bio-nav-next">
+      <a href="flowers.html">
+        <span class="bio-nav-label">Next Pioneer →</span>
+        <span class="bio-nav-name">Tommy Flowers</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Ask<span style="color:var(--gold)">Why</span>.fyi</a>
+        <p class="footer-desc">A digital museum dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Explore</h4>
+        <ul class="footer-links">
+          <li><a href="hidden-figures.html">Hidden Figures</a></li>
+          <li><a href="innovation.html">Innovation</a></li>
+          <li><a href="timeline.html">Timeline</a></li>
+          <li><a href="ask-why.html">Ask Why</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Figures</h4>
+        <ul class="footer-links">
+          <li><a href="heaviside.html">Oliver Heaviside</a></li>
+          <li><a href="flowers.html">Tommy Flowers</a></li>
+          <li><a href="cochrane.html">Archie Cochrane</a></li>
+          <li><a href="mary-anning.html">Mary Anning</a></li>
+          <li><a href="elizabeth-garrett-anderson.html">Elizabeth Garrett Anderson</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 AskWhy.fyi — Accuracy first, narrative second.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

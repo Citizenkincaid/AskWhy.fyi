@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timeline — AskWhy.fyi</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Timeline Page Overrides ── */
+    .timeline-hero {
+      min-height: 45vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 140px 8% 64px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .timeline-hero-inner { position: relative; z-index: 1; max-width: 700px; }
+
+    .timeline-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin: 16px 0 24px;
+    }
+
+    .timeline-hero p {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      color: var(--text-body);
+      line-height: 1.65;
+      max-width: 520px;
+    }
+
+    /* ── Filter bar ── */
+    .timeline-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 8%;
+      border-bottom: 1px solid var(--border);
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-count {
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── Main timeline layout ── */
+    .timeline-main {
+      padding: 80px 8% 120px;
+      position: relative;
+    }
+
+    /* Central spine */
+    .timeline-spine {
+      position: absolute;
+      left: calc(8% + 180px);
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+    }
+
+    /* Each row */
+    .tl-item {
+      display: grid;
+      grid-template-columns: 180px 80px 1fr;
+      gap: 0;
+      margin-bottom: 72px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .tl-item.visible { opacity: 1; transform: translateY(0); }
+
+    /* Year */
+    .tl-year {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -1.5px;
+      text-align: right;
+      padding-right: 0;
+      padding-top: 2px;
+      line-height: 1;
+    }
+
+    /* Node column */
+    .tl-node-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .tl-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 0 4px rgba(201,168,76,.12), 0 0 16px rgba(201,168,76,.3);
+      flex-shrink: 0;
+      transition: box-shadow .3s;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tl-item:hover .tl-dot {
+      box-shadow: 0 0 0 6px rgba(201,168,76,.18), 0 0 24px rgba(201,168,76,.5);
+      background: var(--gold);
+    }
+
+    /* Content card */
+    .tl-content {
+      padding-left: 40px;
+      padding-bottom: 8px;
+    }
+
+    .tl-card {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 36px;
+      transition: border-color .3s, box-shadow .3s, transform .3s;
+    }
+
+    .tl-item:hover .tl-card {
+      border-color: rgba(201,168,76,.35);
+      box-shadow: 0 16px 48px rgba(0,0,0,.45);
+      transform: translateX(4px);
+    }
+
+    .tl-category {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .tl-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 14px;
+      letter-spacing: -.3px;
+    }
+
+    .tl-text {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--text-body);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    .tl-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: border-color .2s, gap .2s;
+    }
+
+    .tl-link:hover { border-color: var(--gold); gap: 10px; }
+
+    /* Era dividers */
+    .tl-era {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 48px;
+      margin-top: 16px;
+    }
+
+    .tl-era-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .tl-era-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Category colour dots on card */
+    .tl-cat-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+      position: relative; top: -1px;
+    }
+
+    .cat-science  { background: #6baed6; }
+    .cat-medicine { background: #74c476; }
+    .cat-tech     { background: #fd8d3c; }
+    .cat-naval    { background: #9e7d35; }
+
+    @media (max-width: 900px) {
+      .timeline-spine { left: 6%; }
+      .tl-item { grid-template-columns: 70px 48px 1fr; }
+      .tl-year { font-size: 22px; }
+      .tl-content { padding-left: 20px; }
+      .tl-card { padding: 24px; }
+      .tl-title { font-size: 18px; }
+    }
+
+    @media (max-width: 600px) {
+      .tl-item { grid-template-columns: 56px 36px 1fr; }
+      .tl-year { font-size: 16px; }
+      .timeline-main { padding: 48px 4% 80px; }
+      .timeline-hero { padding: 120px 6% 48px; }
+      .timeline-controls { padding: 24px 6%; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
+    <ul class="nav-links">
+      <li><a href="hidden-figures.html">Explore</a></li>
+      <li><a href="innovation.html">Innovation</a></li>
+      <li><a href="hidden-figures.html">Hidden Figures</a></li>
+      <li><a href="timeline.html" class="active">Timeline</a></li>
+      <li><a href="ask-why.html">Ask Why</a></li>
+    </ul>
+    <div class="nav-right">
+      <input class="nav-search" type="text" placeholder="Search pioneers…" />
+      <a href="index.html#newsletter" class="subscribe-btn">Subscribe</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="timeline-hero">
+    <div class="timeline-hero-inner">
+      <p class="eyebrow">Across the Centuries</p>
+      <h1>A History of<br>Overlooked Genius</h1>
+      <p>The discoveries that shaped human knowledge — and the people quietly erased from their own stories.</p>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="timeline-controls">
+    <div class="filter-tabs" style="margin:0;">
+      <button class="filter-tab active">All</button>
+      <button class="filter-tab">Innovation</button>
+      <button class="filter-tab">Science</button>
+      <button class="filter-tab">Medicine</button>
+      <button class="filter-tab">Exploration</button>
+    </div>
+    <span class="timeline-count">7 entries</span>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-main">
+    <div class="timeline-spine"></div>
+
+    <!-- 1800s -->
+    <div class="tl-era">
+      <span class="tl-era-label">19th Century</span>
+      <div class="tl-era-line"></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1799</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-science"></span>Science · Palaeontology</p>
+          <h3 class="tl-title">Mary Anning Discovers Her First Ichthyosaur</h3>
+          <p class="tl-text">A twelve-year-old girl in Lyme Regis uncovers a complete ichthyosaur skeleton — the first confirmed specimen in the world. The discovery is reported by male geologists who do not mention her name.</p>
+          <a href="mary-anning.html" class="tl-link">Read Mary Anning's story →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1809</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-naval"></span>Naval History · Exploration</p>
+          <h3 class="tl-title">Cochrane's Fireships at Aix Roads</h3>
+          <p class="tl-text">Captain Thomas Cochrane leads one of the most audacious naval attacks in British history, nearly destroying the French fleet. His admiral refuses to press the advantage. Cochrane is court-martialed within the year.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1836</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-medicine"></span>Medicine · Equality</p>
+          <h3 class="tl-title">Elizabeth Garrett Anderson Begins Her Medical Education</h3>
+          <p class="tl-text">Rejected by every medical school in Britain, Anderson teaches herself anatomy, passes the Society of Apothecaries examination, and becomes the first woman licensed to practise medicine in England. The Society promptly changes its rules to exclude women.</p>
+          <a href="elizabeth-garrett-anderson.html" class="tl-link">Read Elizabeth Garrett Anderson's story →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1885</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-tech"></span>Innovation · Engineering</p>
+          <h3 class="tl-title">Heaviside Rewrites Maxwell's Equations</h3>
+          <p class="tl-text">Working alone in rented rooms, Oliver Heaviside compresses Maxwell's twenty quaternion equations into the four vector equations still taught in every physics course today. He invents operational calculus, predicts the ionosphere, and is ignored for a decade.</p>
+          <a href="heaviside.html" class="tl-link">Read Oliver Heaviside's story →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1900s -->
+    <div class="tl-era">
+      <span class="tl-era-label">20th Century</span>
+      <div class="tl-era-line"></div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1938</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-science"></span>Science · Physics</p>
+          <h3 class="tl-title">Lise Meitner Explains Nuclear Fission</h3>
+          <p class="tl-text">Lise Meitner provides the theoretical explanation of nuclear fission. The 1944 Nobel Prize in Chemistry goes to her former collaborator Otto Hahn. Meitner is not included, despite being nominated 48 times across her career.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1943</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-tech"></span>Innovation · Computing</p>
+          <h3 class="tl-title">Tommy Flowers Builds Colossus</h3>
+          <p class="tl-text">Post Office engineer Tommy Flowers builds Colossus — the world's first programmable electronic computer — to crack the Lorenz cipher used by Hitler's high command. At the war's end, Churchill orders the machines destroyed. Flowers carries the secret for thirty years.</p>
+          <a href="flowers.html" class="tl-link">Read Tommy Flowers's story →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-year">1972</div>
+      <div class="tl-node-col"><div class="tl-dot"></div></div>
+      <div class="tl-content">
+        <div class="tl-card">
+          <p class="tl-category"><span class="tl-cat-dot cat-medicine"></span>Medicine · Evidence</p>
+          <h3 class="tl-title">Archie Cochrane Publishes <em>Effectiveness and Efficiency</em></h3>
+          <p class="tl-text">In a slim, clear-eyed book, Archie Cochrane argues that most medical treatments have never been rigorously tested, and that the profession owes its patients evidence — not tradition. The British Medical Journal calls it "a provocation." He is right about nearly everything.</p>
+          <a href="cochrane.html" class="tl-link">Read Archie Cochrane's story →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Ask<span style="color:var(--gold)">Why</span>.fyi</a>
+        <p class="footer-desc">A digital museum dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Explore</h4>
+        <ul class="footer-links">
+          <li><a href="hidden-figures.html">Hidden Figures</a></li>
+          <li><a href="innovation.html">Innovation</a></li>
+          <li><a href="timeline.html">Timeline</a></li>
+          <li><a href="ask-why.html">Ask Why</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Figures</h4>
+        <ul class="footer-links">
+          <li><a href="heaviside.html">Oliver Heaviside</a></li>
+          <li><a href="flowers.html">Tommy Flowers</a></li>
+          <li><a href="cochrane.html">Archie Cochrane</a></li>
+          <li><a href="mary-anning.html">Mary Anning</a></li>
+          <li><a href="elizabeth-garrett-anderson.html">Elizabeth Garrett Anderson</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 AskWhy.fyi — Accuracy first, narrative second.</div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Scroll-triggered fade-in for timeline items
+    const items = document.querySelectorAll('.tl-item');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    items.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

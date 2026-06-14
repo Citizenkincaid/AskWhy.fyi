@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AskWhy.fyi — A Museum of Forgotten Genius</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
+    <ul class="nav-links">
+      <li><a href="hidden-figures.html">Explore</a></li>
+      <li><a href="innovation.html">Innovation</a></li>
+      <li><a href="hidden-figures.html">Hidden Figures</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="ask-why.html">Ask Why</a></li>
+    </ul>
+    <div class="nav-right">
+      <input class="nav-search" type="text" placeholder="Search pioneers…" />
+      <a href="#newsletter" class="subscribe-btn">Subscribe</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <canvas id="heroCanvas" class="hero-canvas"></canvas>
+
+    <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+    <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+    <div class="orbit orbit-3"><div class="orbit-dot"></div></div>
+
+    <div class="hero-content">
+      <span class="eyebrow">Questions Can Change Everything</span>
+      <h1>Ask<em>Why</em>.fyi</h1>
+      <p class="hero-sub">Why do some people change history and disappear from it?</p>
+      <div class="hero-buttons">
+        <a href="hidden-figures.html" class="btn-primary">Begin Exploring</a>
+        <a href="timeline.html" class="btn-secondary">View Timeline</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── Featured Spotlight ── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Featured Story</p>
+        <h2 class="section-title">This Week's Spotlight</h2>
+      </div>
+      <a href="hidden-figures.html" class="see-all">All Pioneers →</a>
+    </div>
+
+    <div class="spotlight">
+      <div class="spotlight-img">
+    <img src="images/heaviside.jpg" alt="Oliver Heaviside">
+</div>
+      <div class="spotlight-body">
+        <div class="spotlight-tags">
+          <span class="tag-pill">⚡ Innovation</span>
+          <span class="tag-pill">Hidden Figures</span>
+        </div>
+        <h3 class="spotlight-title">The Man Who Tamed the Electron — and Was Erased for It</h3>
+        <p class="spotlight-text">Oliver Heaviside rewrote Maxwell's equations, predicted the ionosphere, and invented operational calculus — all from a single rented room. Yet history barely knows his name.</p>
+        <p class="spotlight-meta">1850 — 1925 &nbsp;·&nbsp; 14 min read</p>
+        <a href="heaviside.html" class="btn-read">Read the Full Story</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── Newly Added ── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Just Published</p>
+        <h2 class="section-title">Newly Added Discoveries</h2>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <a href="heaviside.html" class="card">
+        <div class="card-thumb">⚡</div>
+        <div class="card-body">
+          <p class="card-tag">Innovation</p>
+          <h3 class="card-title">The Actress Who Invented WiFi's Foundation</h3>
+          <p class="card-excerpt">Hedy Lamarr's wartime patent quietly became the basis for modern wireless communication.</p>
+        </div>
+      </a>
+      <a href="flowers.html" class="card">
+        <div class="card-thumb">⚓</div>
+        <div class="card-body">
+          <p class="card-tag">Presence &amp; Legacy</p>
+          <h3 class="card-title">The Admiral Too Brilliant to Trust</h3>
+          <p class="card-excerpt">Thomas Cochrane inspired naval fiction's greatest heroes — and was nearly erased from naval history.</p>
+        </div>
+      </a>
+      <a href="ask-why.html" class="card">
+        <div class="card-thumb">🔬</div>
+        <div class="card-body">
+          <p class="card-tag">Ask Why</p>
+          <h3 class="card-title">The Attribution Problem Explained</h3>
+          <p class="card-excerpt">Why credit flows upward to those who already have status, and away from those who need it.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── Timeline Strip ── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Across the Centuries</p>
+        <h2 class="section-title">A Global Timeline of<br>Overlooked Genius</h2>
+      </div>
+      <a href="timeline.html" class="see-all">Full Timeline →</a>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active">All</button>
+      <button class="filter-tab">Innovation</button>
+      <button class="filter-tab">Science</button>
+      <button class="filter-tab">Exploration</button>
+    </div>
+
+    <div class="timeline-strip">
+      <div class="timeline-card">
+        <div class="timeline-year">1799</div>
+        <div class="timeline-card-title">Mary Anning's First Fossil Find</div>
+        <p class="timeline-card-text">A child in Lyme Regis discovers an ichthyosaur skeleton, launching a career that would redefine paleontology — without credit, for decades.</p>
+      </div>
+      <div class="timeline-card">
+        <div class="timeline-year">1809</div>
+        <div class="timeline-card-title">Cochrane's Fireships at Aix Roads</div>
+        <p class="timeline-card-text">Thomas Cochrane executes one of the most audacious naval attacks in history — and is court-martialed within the year.</p>
+      </div>
+      <div class="timeline-card">
+        <div class="timeline-year">1885</div>
+        <div class="timeline-card-title">Heaviside Rewrites Maxwell</div>
+        <p class="timeline-card-text">Twenty quaternion equations become four vector equations. The notation engineers still use today is born in a rented room.</p>
+      </div>
+      <div class="timeline-card">
+        <div class="timeline-year">1938</div>
+        <div class="timeline-card-title">Meitner Explains Fission</div>
+        <p class="timeline-card-text">Lise Meitner provides the theoretical explanation of nuclear fission. The Nobel goes to her former collaborator.</p>
+      </div>
+      <div class="timeline-card">
+        <div class="timeline-year">1943</div>
+        <div class="timeline-card-title">Flowers Builds Colossus</div>
+        <p class="timeline-card-text">Tommy Flowers constructs the world's first programmable electronic computer to break Nazi codes. The project stays secret for 30 years.</p>
+      </div>
+      <div class="timeline-card">
+        <div class="timeline-year">1972</div>
+        <div class="timeline-card-title">Cochrane Founds EBM</div>
+        <p class="timeline-card-text">Archie Cochrane publishes his landmark call for evidence-based medicine. The medical establishment is not pleased.</p>
+      </div>
+    </div>
+    <div class="timeline-scroll-bar">
+      <div class="timeline-scroll-progress"></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── Six Lenses ── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Explore by Theme</p>
+        <h2 class="section-title">Six Lenses on a Forgotten World</h2>
+      </div>
+    </div>
+
+    <div class="lenses-grid">
+      <a href="hidden-figures.html" class="lens-card">
+        <div class="lens-num">01</div>
+        <div class="lens-icon">🕯️</div>
+        <h3 class="lens-title">Presence &amp; Legacy</h3>
+        <p class="lens-desc">How the influence of a person outlives their name — and how names get lost along the way.</p>
+        <span class="lens-count">8 Articles</span>
+      </a>
+      <a href="innovation.html" class="lens-card">
+        <div class="lens-num">02</div>
+        <div class="lens-icon">⚡</div>
+        <h3 class="lens-title">Innovation</h3>
+        <p class="lens-desc">The breakthroughs that quietly became the infrastructure of everyday life.</p>
+        <span class="lens-count">12 Articles</span>
+      </a>
+      <a href="hidden-figures.html" class="lens-card">
+        <div class="lens-num">03</div>
+        <div class="lens-icon">🔍</div>
+        <h3 class="lens-title">Hidden Figures</h3>
+        <p class="lens-desc">The people behind the discovery — written out of the textbook, the patent, the prize.</p>
+        <span class="lens-count">10 Articles</span>
+      </a>
+      <a href="timeline.html" class="lens-card">
+        <div class="lens-num">04</div>
+        <div class="lens-icon">⚙️</div>
+        <h3 class="lens-title">Forgotten Technologies</h3>
+        <p class="lens-desc">Devices and methods the ancient and modern world built, lost, and had to reinvent.</p>
+        <span class="lens-count">6 Articles</span>
+      </a>
+      <a href="ask-why.html" class="lens-card">
+        <div class="lens-num">05</div>
+        <div class="lens-icon">🧬</div>
+        <h3 class="lens-title">Scientific Revolutions</h3>
+        <p class="lens-desc">The moments a single idea, resisted for decades, quietly rewrote the rules.</p>
+        <span class="lens-count">7 Articles</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── Most Read ── -->
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Reader Favorites</p>
+        <h2 class="section-title">Most Read Articles</h2>
+      </div>
+    </div>
+    <div class="cards-grid">
+      <a href="heaviside.html" class="card">
+        <div class="card-thumb">⚡</div>
+        <div class="card-body">
+          <p class="card-tag">Innovation</p>
+          <h3 class="card-title">The Engineer History Deleted</h3>
+          <p class="card-excerpt">Oliver Heaviside changed how we talk about electricity. Almost no one can say his name.</p>
+        </div>
+      </a>
+      <a href="flowers.html" class="card">
+        <div class="card-thumb">💻</div>
+        <div class="card-body">
+          <p class="card-tag">Hidden Figures</p>
+          <h3 class="card-title">The Machine That Won the War Twice</h3>
+          <p class="card-excerpt">Tommy Flowers built Colossus, then watched it be destroyed, and was told never to speak of it.</p>
+        </div>
+      </a>
+      <a href="cochrane.html" class="card">
+        <div class="card-thumb">⚗️</div>
+        <div class="card-body">
+          <p class="card-tag">Scientific Revolutions</p>
+          <h3 class="card-title">The Man Who Asked Doctors to Prove It</h3>
+          <p class="card-excerpt">Archie Cochrane had one simple demand: show me the evidence. Medicine resisted for decades.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Newsletter ── -->
+  <div id="newsletter">
+    <div class="newsletter">
+      <h2 class="newsletter-title">One Person. One Story.<br>Every Thursday.</h2>
+      <p class="newsletter-sub">Join readers who get a single 800-word profile of an overlooked pioneer delivered to their inbox — free, forever.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <input class="newsletter-input" type="email" placeholder="you@example.com" />
+        <button class="newsletter-btn" type="submit">Subscribe</button>
+      </form>
+      <p class="newsletter-fine">No spam. Unsubscribe anytime. One email per week.</p>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Ask<span style="color:var(--gold)">Why</span>.fyi</a>
+        <p class="footer-desc">A digital museum dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Explore</h4>
+        <ul class="footer-links">
+          <li><a href="hidden-figures.html">Presence &amp; Legacy</a></li>
+          <li><a href="innovation.html">Innovation</a></li>
+          <li><a href="hidden-figures.html">Hidden Figures</a></li>
+          <li><a href="timeline.html">Forgotten Technologies</a></li>
+          <li><a href="ask-why.html">Ask Why</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Site</h4>
+        <ul class="footer-links">
+          <li><a href="timeline.html">Timeline</a></li>
+          <li><a href="hidden-figures.html">Explore</a></li>
+          <li><a href="#">Search</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 AskWhy.fyi — Accuracy first, narrative second.
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
