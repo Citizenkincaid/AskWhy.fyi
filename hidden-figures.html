@@ -5,6 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hidden Figures — AskWhy.fyi</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+
+    .figures-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .figure-card {
+      background: var(--navy-card);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .figure-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201,168,76,.25);
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    }
+
+    /* Big icon area */
+    .figure-img {
+      flex: 1;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .figure-icon {
+      font-size: 64px;
+      opacity: .22;
+      transition: opacity .3s, transform .3s;
+      filter: drop-shadow(0 0 20px currentColor);
+    }
+
+    .figure-card:hover .figure-icon {
+      opacity: .35;
+      transform: scale(1.08);
+    }
+
+    /* Subtle radial glow behind icon */
+    .figure-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,.04) 0%, transparent 70%);
+    }
+
+    /* Bottom text block */
+    .figure-body {
+      padding: 24px 26px 28px;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    .figure-dates {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: .5px;
+      margin-bottom: 8px;
+    }
+
+    .figure-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .figure-title {
+      font-size: 13px;
+      color: var(--gold);
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    .figure-excerpt {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Icon colours per figure */
+    .icon-heaviside  { color: #c9a84c; }
+    .icon-flowers    { color: #6baed6; }
+    .icon-cochrane   { color: #74c476; }
+    .icon-anning     { color: #3d9970; }
+    .icon-anderson   { color: #9b59b6; }
+
+    @media (max-width: 1100px) {
+      .figures-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .figures-grid { grid-template-columns: repeat(2, 1fr); }
+      .figure-img { min-height: 160px; }
+    }
+    @media (max-width: 480px) {
+      .figures-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
@@ -30,7 +140,7 @@
   </div>
 
   <section class="section">
-    <div class="filter-tabs">
+    <div class="filter-tabs" style="margin-bottom:48px;">
       <button class="filter-tab active">All</button>
       <button class="filter-tab">Science</button>
       <button class="filter-tab">Engineering</button>
@@ -39,17 +149,23 @@
     </div>
 
     <div class="figures-grid">
+
       <a href="heaviside.html" class="figure-card">
-        <div class="figure-img">⚡</div>
+        <div class="figure-img">
+          <span class="figure-icon icon-heaviside">⚡</span>
+        </div>
         <div class="figure-body">
           <p class="figure-dates">1850 — 1925</p>
           <h3 class="figure-name">Oliver Heaviside</h3>
           <p class="figure-title">The Engineer Who Rewrote Physics</p>
-          <p class="figure-excerpt">Reformulated Maxwell's equations, predicted the ionosphere, invented operational calculus. Died in poverty and obscurity.</p>
+          <p class="figure-excerpt">Reformulated Maxwell's equations, invented operational calculus. Died in poverty and obscurity.</p>
         </div>
       </a>
+
       <a href="flowers.html" class="figure-card">
-        <div class="figure-img">💻</div>
+        <div class="figure-img">
+          <span class="figure-icon icon-flowers">💻</span>
+        </div>
         <div class="figure-body">
           <p class="figure-dates">1905 — 1998</p>
           <h3 class="figure-name">Tommy Flowers</h3>
@@ -57,8 +173,11 @@
           <p class="figure-excerpt">Built Colossus, the world's first programmable electronic computer, to break Nazi codes. Sworn to secrecy for 30 years.</p>
         </div>
       </a>
+
       <a href="cochrane.html" class="figure-card">
-        <div class="figure-img">⚗️</div>
+        <div class="figure-img">
+          <span class="figure-icon icon-cochrane">🔬</span>
+        </div>
         <div class="figure-body">
           <p class="figure-dates">1909 — 1988</p>
           <h3 class="figure-name">Archie Cochrane</h3>
@@ -66,8 +185,11 @@
           <p class="figure-excerpt">Demanded clinical trials for medical treatments. Spent decades fighting a profession that preferred tradition over evidence.</p>
         </div>
       </a>
+
       <a href="mary-anning.html" class="figure-card">
-        <div class="figure-img">🦕</div>
+        <div class="figure-img">
+          <span class="figure-icon icon-anning">🦕</span>
+        </div>
         <div class="figure-body">
           <p class="figure-dates">1799 — 1847</p>
           <h3 class="figure-name">Mary Anning</h3>
@@ -75,8 +197,11 @@
           <p class="figure-excerpt">Discovered some of the most important fossils in history. Her gender and class kept her name out of the papers that described them.</p>
         </div>
       </a>
+
       <a href="elizabeth-garrett-anderson.html" class="figure-card">
-        <div class="figure-img">🩺</div>
+        <div class="figure-img">
+          <span class="figure-icon icon-anderson">🩺</span>
+        </div>
         <div class="figure-body">
           <p class="figure-dates">1836 — 1917</p>
           <h3 class="figure-name">Elizabeth Garrett Anderson</h3>
@@ -84,6 +209,7 @@
           <p class="figure-excerpt">Fought every institution that tried to stop her from practising medicine. Then built a hospital that outlasted them all.</p>
         </div>
       </a>
+
     </div>
   </section>
 
