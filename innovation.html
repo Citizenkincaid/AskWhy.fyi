@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innovation — AskWhy.fyi</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ───────────────────────────────────────────
+       Page-scoped styles for Innovation
+       Uses ONLY existing palette variables from style.css
+       (new layout / motif, same Golden Sand colours)
+    ─────────────────────────────────────────── */
+
+    /* Hero with a faint "blueprint" grid — the page's signature motif */
+    .inv-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 170px 8% 76px;
+      border-bottom: 1px solid var(--gold-border);
+      background:
+        radial-gradient(820px 420px at 82% 0%, rgba(230,201,131,.42) 0%, transparent 65%),
+        var(--sand-1);
+    }
+    .inv-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--gold-border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--gold-border) 1px, transparent 1px);
+      background-size: 46px 46px;
+      opacity: .45;
+      -webkit-mask-image: radial-gradient(circle at 82% 14%, #000, transparent 72%);
+              mask-image: radial-gradient(circle at 82% 14%, #000, transparent 72%);
+      pointer-events: none;
+    }
+    .inv-hero-inner { position: relative; z-index: 1; max-width: 740px; }
+    .inv-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(42px, 6vw, 74px);
+      font-weight: 800;
+      color: var(--ink-1);
+      line-height: 1.06;
+      letter-spacing: -2px;
+      margin: 16px 0 22px;
+    }
+    .inv-hero h1 em { font-style: italic; font-weight: 600; color: var(--gold); }
+    .inv-hero p {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      color: var(--ink-2);
+      max-width: 580px;
+      line-height: 1.7;
+    }
+
+    /* Stat band */
+    .inv-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      padding: 46px 8%;
+      border-bottom: 1px solid var(--gold-border);
+      background: linear-gradient(180deg, var(--surface) 0%, #E8D29A 100%);
+      box-shadow: inset 0 1px 0 rgba(255,249,236,.5);
+    }
+    .inv-stat-num {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4vw, 48px);
+      font-weight: 700;
+      color: var(--gold-dark);
+      line-height: 1;
+      letter-spacing: -1.5px;
+    }
+    .inv-stat-label {
+      display: block;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--ink-2);
+      line-height: 1.55;
+      max-width: 220px;
+    }
+
+    /* Lead feature */
+    .inv-lead { padding: 110px 8% 90px; border-bottom: 1px solid var(--gold-border); }
+    .inv-lead-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 64px;
+      align-items: center;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .inv-lead-portrait {
+      position: relative;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      border: 1px solid var(--gold);
+      box-shadow: 0 0 0 5px rgba(184,134,11,.08), var(--shadow-xl);
+    }
+    .inv-lead-portrait img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      object-position: center top;
+      filter: sepia(16%) contrast(1.04);
+    }
+    .inv-lead-badge {
+      position: absolute;
+      left: 18px; bottom: 18px;
+      background: rgba(245,232,199,.92);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--r-sm);
+      padding: 9px 15px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      backdrop-filter: blur(6px);
+    }
+    .inv-lead-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+    }
+    .inv-lead-grid h2 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 3.6vw, 46px);
+      font-weight: 700;
+      color: var(--ink-1);
+      line-height: 1.14;
+      letter-spacing: -.6px;
+      margin-bottom: 22px;
+    }
+    .inv-lead-grid p {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      color: var(--ink-2);
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+    .inv-lead-grid .btn-read { margin-top: 8px; }
+
+    /* "Then → Now" innovation grid — the unique element of this page */
+    .inv-section { padding: 110px 8%; border-bottom: 1px solid var(--gold-border); }
+    .inv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 26px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .inv-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--sand-2);
+      border: 1px solid var(--gold-border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+    .inv-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold-border-strong);
+      box-shadow: var(--shadow-lg);
+    }
+    .inv-card-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 26px 30px 4px;
+    }
+    .inv-portrait,
+    .inv-portrait-fallback {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid var(--gold);
+      box-shadow: 0 0 0 4px rgba(184,134,11,.08);
+    }
+    .inv-portrait { object-fit: cover; object-position: center top; filter: sepia(14%) contrast(1.04); }
+    .inv-portrait-fallback {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      background: linear-gradient(135deg, var(--sand-3), var(--surface));
+      color: rgba(139,105,20,.55);
+    }
+    .inv-person { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--ink-1); line-height: 1.2; }
+    .inv-role   { font-size: 12px; color: var(--gold-dark); font-style: italic; }
+
+    .inv-card-body { padding: 8px 30px 4px; }
+    .inv-step { padding: 16px 0; }
+    .inv-label {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold-dark);
+      margin-bottom: 9px;
+    }
+    .inv-year-pill {
+      font-family: var(--font-body);
+      background: var(--gold-pale);
+      border: 1px solid var(--gold-border);
+      border-radius: 20px;
+      padding: 3px 11px;
+      letter-spacing: 1px;
+      color: var(--gold-dark);
+    }
+    .inv-step p { font-family: var(--font-serif); font-size: 16px; color: var(--ink-2); line-height: 1.65; }
+    .inv-arrow { display: flex; align-items: center; gap: 12px; color: var(--gold); }
+    .inv-arrow .line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--gold-border), var(--gold), var(--gold-border));
+    }
+    .inv-arrow .tip { font-size: 16px; line-height: 1; }
+    .inv-card-foot {
+      margin-top: auto;
+      padding: 16px 30px 26px;
+      border-top: 1px solid var(--gold-border);
+    }
+    .inv-readlink {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--gold-dark);
+      border-bottom: 1px solid transparent; padding-bottom: 2px;
+      transition: border-color .2s ease, gap .2s ease;
+    }
+    .inv-readlink:hover { border-color: var(--gold); gap: 11px; }
+    .inv-muted { color: var(--ink-4); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+
+    /* reveal-on-scroll */
+    .inv-reveal { opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; }
+    .inv-reveal.is-in { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1100px) {
+      .inv-stats { grid-template-columns: repeat(2, 1fr); gap: 34px; }
+      .inv-lead-grid { grid-template-columns: 1fr; gap: 40px; }
+      .inv-lead-portrait { max-width: 420px; }
+    }
+    @media (max-width: 768px) {
+      .inv-hero { padding: 120px 6% 56px; }
+      .inv-stats { grid-template-columns: 1fr; gap: 26px; padding: 40px 6%; }
+      .inv-lead, .inv-section { padding: 72px 6%; }
+      .inv-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="landscape-nudge" id="landscapeNudge">
+    <div class="landscape-nudge-icon">📱</div>
+    <h2 class="landscape-nudge-title">Better in Landscape</h2>
+    <p class="landscape-nudge-sub">Rotate your device for the full museum experience.</p>
+    <button class="landscape-nudge-skip" id="nudgeSkip">Continue anyway</button>
+  </div>
+
+  <!-- ── Navigation ── -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hidden-figures.html">Explore</a></li>
+      <li><a href="innovation.html" class="active">Innovation</a></li>
+      <li><a href="hidden-figures.html">Hidden Figures</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="ask-why.html">Ask Why</a></li>
+    </ul>
+    <div class="nav-right">
+      <input class="nav-search" type="text" placeholder="Search pioneers…" />
+      <a href="index.html#newsletter" class="subscribe-btn">Subscribe</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <header class="inv-hero">
+    <div class="inv-hero-inner">
+      <p class="eyebrow">Lens 02 — Innovation</p>
+      <h1>The Quiet Inventions That Became <em>Everything</em></h1>
+      <p>Some breakthroughs arrive with fireworks. Most arrive in a rented room, a wartime lab, or a patent nobody reads for fifty years — and then quietly become the infrastructure of ordinary life. These are the people who built the modern world and were billed as a footnote.</p>
+    </div>
+  </header>
+
+  <!-- ── Stat band ── -->
+  <section class="inv-stats">
+    <div>
+      <span class="inv-stat-num">4</span>
+      <span class="inv-stat-label">equations that still define electromagnetism — reduced from twenty by one self-taught man.</span>
+    </div>
+    <div>
+      <span class="inv-stat-num">1942</span>
+      <span class="inv-stat-label">the patent that anticipated Wi-Fi, Bluetooth and GPS — filed by a film star.</span>
+    </div>
+    <div>
+      <span class="inv-stat-num">1<span style="font-size:.55em;vertical-align:super">st</span></span>
+      <span class="inv-stat-label">programmable electronic computer, built in secret and then deliberately destroyed.</span>
+    </div>
+    <div>
+      <span class="inv-stat-num">30<span style="font-size:.5em"> yrs</span></span>
+      <span class="inv-stat-label">that the machine which helped win a world war stayed classified.</span>
+    </div>
+  </section>
+
+  <!-- ── Lead feature ── -->
+  <section class="inv-lead">
+    <div class="inv-lead-grid inv-reveal">
+      <div class="inv-lead-portrait">
+        <img src="images/hedy.jpg" alt="Hedy Lamarr" />
+        <span class="inv-lead-badge">Featured · 1914 — 2000</span>
+      </div>
+      <div>
+        <p class="inv-lead-eyebrow">The Invention Hiding in Your Pocket</p>
+        <h2>A Hollywood star drew the blueprint for wireless — and was thanked with a smile, not a citation.</h2>
+        <p>In 1942, at the height of her fame, Hedy Lamarr and composer George Antheil patented a system for "frequency hopping" — a way to keep a radio signal from being jammed by skipping rapidly between channels. The Navy filed it away. It seemed like an oddity from an actress with a hobby.</p>
+        <p>Decades later, that same idea — spread-spectrum transmission — became the backbone of Wi-Fi, Bluetooth and GPS. The phone you are likely reading this on owes its wireless connection to a patent the world dismissed because of who held it.</p>
+        <a href="hedy-lamarr.html" class="btn-read">Read Hedy's Full Story →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Then → Now grid ── -->
+  <section class="inv-section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">From Breakthrough to Infrastructure</p>
+        <h2 class="section-title">Then → Now</h2>
+      </div>
+      <a href="timeline.html" class="see-all">Full Timeline →</a>
+    </div>
+
+    <div class="inv-grid">
+
+      <!-- Heaviside -->
+      <article class="inv-card inv-reveal">
+        <div class="inv-card-head">
+          <img class="inv-portrait" src="images/heaviside.jpg" alt="Oliver Heaviside" />
+          <div>
+            <div class="inv-person">Oliver Heaviside</div>
+            <div class="inv-role">Self-taught physicist &amp; engineer</div>
+          </div>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-step">
+            <span class="inv-label"><span class="inv-year-pill">1885</span> The Breakthrough</span>
+            <p>Rewrote Maxwell's twenty tangled equations into the four compact ones engineers still use, invented operational calculus, and predicted a conducting layer in the upper atmosphere.</p>
+          </div>
+          <div class="inv-arrow" aria-hidden="true"><span class="line"></span><span class="tip">→</span></div>
+          <div class="inv-step">
+            <span class="inv-label">Now</span>
+            <p>The mathematics of every electrical-engineering degree, long-distance telephony, and the ionosphere that still bounces radio around the globe.</p>
+          </div>
+        </div>
+        <div class="inv-card-foot"><a href="heaviside.html" class="inv-readlink">Read the story →</a></div>
+      </article>
+
+      <!-- Flowers -->
+      <article class="inv-card inv-reveal">
+        <div class="inv-card-head">
+          <img class="inv-portrait" src="images/Tommy_Flowers.jpg" alt="Tommy Flowers" />
+          <div>
+            <div class="inv-person">Tommy Flowers</div>
+            <div class="inv-role">Post Office engineer</div>
+          </div>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-step">
+            <span class="inv-label"><span class="inv-year-pill">1943</span> The Breakthrough</span>
+            <p>Built Colossus, the world's first programmable electronic digital computer, to break German cipher traffic — funding much of it from his own pocket when superiors doubted it.</p>
+          </div>
+          <div class="inv-arrow" aria-hidden="true"><span class="line"></span><span class="tip">→</span></div>
+          <div class="inv-step">
+            <span class="inv-label">Now</span>
+            <p>Every digital computer on Earth. The machines were dismantled and the work sealed for thirty years, so others were credited as "first."</p>
+          </div>
+        </div>
+        <div class="inv-card-foot"><a href="flowers.html" class="inv-readlink">Read the story →</a></div>
+      </article>
+
+      <!-- Lamarr -->
+      <article class="inv-card inv-reveal">
+        <div class="inv-card-head">
+          <img class="inv-portrait" src="images/hedy.jpg" alt="Hedy Lamarr" />
+          <div>
+            <div class="inv-person">Hedy Lamarr</div>
+            <div class="inv-role">Inventor &amp; actress</div>
+          </div>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-step">
+            <span class="inv-label"><span class="inv-year-pill">1942</span> The Breakthrough</span>
+            <p>Co-patented frequency-hopping spread spectrum — a jam-proof way to transmit a signal by skipping rapidly across many frequencies.</p>
+          </div>
+          <div class="inv-arrow" aria-hidden="true"><span class="line"></span><span class="tip">→</span></div>
+          <div class="inv-step">
+            <span class="inv-label">Now</span>
+            <p>Wi-Fi, Bluetooth and GPS. Recognised by the inventing community only near the very end of her life.</p>
+          </div>
+        </div>
+        <div class="inv-card-foot"><a href="hedy-lamarr.html" class="inv-readlink">Read the story →</a></div>
+      </article>
+
+      <!-- Cochrane -->
+      <article class="inv-card inv-reveal">
+        <div class="inv-card-head">
+          <img class="inv-portrait" src="images/Cochrane.jpg" alt="Archie Cochrane" />
+          <div>
+            <div class="inv-person">Archie Cochrane</div>
+            <div class="inv-role">Physician &amp; epidemiologist</div>
+          </div>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-step">
+            <span class="inv-label"><span class="inv-year-pill">1972</span> The Breakthrough</span>
+            <p>Argued that medicine should be judged by randomised controlled trials, not authority or habit — and that treatments without evidence should be challenged.</p>
+          </div>
+          <div class="inv-arrow" aria-hidden="true"><span class="line"></span><span class="tip">→</span></div>
+          <div class="inv-step">
+            <span class="inv-label">Now</span>
+            <p>Evidence-based medicine and the clinical guidelines that shape care worldwide — an idea the establishment resisted for decades.</p>
+          </div>
+        </div>
+        <div class="inv-card-foot"><a href="cochrane.html" class="inv-readlink">Read the story →</a></div>
+      </article>
+
+      <!-- Meitner -->
+      <article class="inv-card inv-reveal">
+        <div class="inv-card-head">
+          <span class="inv-portrait-fallback">🧬</span>
+          <div>
+            <div class="inv-person">Lise Meitner</div>
+            <div class="inv-role">Physicist</div>
+          </div>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-step">
+            <span class="inv-label"><span class="inv-year-pill">1938</span> The Breakthrough</span>
+            <p>Provided the theoretical explanation for nuclear fission — the physics of an atomic nucleus splitting and releasing energy.</p>
+          </div>
+          <div class="inv-arrow" aria-hidden="true"><span class="line"></span><span class="tip">→</span></div>
+          <div class="inv-step">
+            <span class="inv-label">Now</span>
+            <p>Nuclear power and the entire atomic age. The Nobel Prize for the discovery went to her collaborator alone.</p>
+          </div>
+        </div>
+        <div class="inv-card-foot"><a href="timeline.html" class="inv-readlink">See on timeline →</a></div>
+      </article>
+
+      <!-- Anning -->
+      <article class="inv-card inv-reveal">
+        <div class="inv-card-head">
+          <img class="inv-portrait" src="images/Marry.jpg" alt="Mary Anning" />
+          <div>
+            <div class="inv-person">Mary Anning</div>
+            <div class="inv-role">Palaeontologist</div>
+          </div>
+        </div>
+        <div class="inv-card-body">
+          <div class="inv-step">
+            <span class="inv-label"><span class="inv-year-pill">1811</span> The Breakthrough</span>
+            <p>Excavated and reconstructed the first correctly identified ichthyosaur, then plesiosaurs and pterosaurs — pioneering the careful method of reading a whole animal from its fossils.</p>
+          </div>
+          <div class="inv-arrow" aria-hidden="true"><span class="line"></span><span class="tip">→</span></div>
+          <div class="inv-step">
+            <span class="inv-label">Now</span>
+            <p>The discipline of palaeontology and our grasp of deep time and extinction — built on finds a working-class woman rarely got to sign.</p>
+          </div>
+        </div>
+        <div class="inv-card-foot"><a href="mary-anning.html" class="inv-readlink">Read the story →</a></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── Editorial quote ── -->
+  <section class="editorial-section">
+    <div class="editorial-inner">
+      <div class="editorial-quote">
+        <blockquote>"The infrastructure of modern life was drafted by people whose names were filed away with the patents."</blockquote>
+      </div>
+      <div class="editorial-body">
+        <p>Innovation rarely fails for lack of brilliance. It fails to be remembered for reasons that have nothing to do with the work: secrecy, war, class, gender, or simply being too far ahead of the room.</p>
+        <p>This lens follows the thread from a single breakthrough to the everyday thing it became — and asks why the person at the start of that thread so often vanishes by the end of it.</p>
+        <a href="ask-why.html" class="editorial-link">Explore the question →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Newsletter ── -->
+  <section class="newsletter-section" id="newsletter">
+    <div class="newsletter">
+      <h2 class="newsletter-title">One Person.<br>One Story. Every Thursday.</h2>
+      <p class="newsletter-sub">A single 800-word profile of an overlooked pioneer, delivered free to your inbox.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <input class="newsletter-input" type="email" placeholder="you@example.com" />
+        <button class="newsletter-btn" type="submit">Subscribe</button>
+      </form>
+      <p class="newsletter-fine">No spam. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
+        <p class="footer-desc">A digital museum dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Explore</h4>
+        <ul class="footer-links">
+          <li><a href="hidden-figures.html">Presence &amp; Legacy</a></li>
+          <li><a href="innovation.html">Innovation</a></li>
+          <li><a href="hidden-figures.html">Hidden Figures</a></li>
+          <li><a href="timeline.html">Timeline</a></li>
+          <li><a href="ask-why.html">Ask Why</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Figures</h4>
+        <ul class="footer-links">
+          <li><a href="heaviside.html">Oliver Heaviside</a></li>
+          <li><a href="flowers.html">Tommy Flowers</a></li>
+          <li><a href="cochrane.html">Archie Cochrane</a></li>
+          <li><a href="mary-anning.html">Mary Anning</a></li>
+          <li><a href="hedy-lamarr.html">Hedy Lamarr</a></li>
+          <li><a href="elizabeth-garrett-anderson.html">Elizabeth Garrett Anderson</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 AskWhy.fyi — Accuracy first, narrative second.</span>
+      <span>A digital museum</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* Reveal-on-scroll for this page's custom blocks */
+    (function () {
+      const els = document.querySelectorAll('.inv-reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(el => el.classList.add('is-in'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+          if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('is-in'), i * 60);
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => io.observe(el));
+    })();
+
+    /* Landscape nudge (same behaviour as the homepage) */
+    (function () {
+      const nudge = document.getElementById('landscapeNudge');
+      const skip  = document.getElementById('nudgeSkip');
+      if (!nudge || !skip) return;
+      let dismissed = sessionStorage.getItem('nudgeDismissed');
+      function check() {
+        if (!dismissed && window.innerWidth < 768 && window.innerHeight > window.innerWidth) {
+          nudge.classList.add('active');
+        } else {
+          nudge.classList.remove('active');
+        }
+      }
+      skip.addEventListener('click', () => {
+        dismissed = true;
+        sessionStorage.setItem('nudgeDismissed', '1');
+        nudge.classList.remove('active');
+      });
+      window.addEventListener('resize', check);
+      window.addEventListener('orientationchange', () => setTimeout(check, 300));
+      setTimeout(check, 1000);
+    })();
+  </script>
+</body>
+</html>

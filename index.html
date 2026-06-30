@@ -3,10 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AskWhy.fyi — A Museum of Forgotten Genius</title>
+  <title>AskWhy.fyi</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ───────────────────────────────────────────
+       index-page structural overrides + polish
+       NOTE: no background-colour changes anywhere —
+       only layout, focus, motion and accent tweaks.
+    ─────────────────────────────────────────── */
+
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-left {
+      position: relative;
+      flex: 1;
+      max-width: 760px;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 720px; }
+
+    /* Anchor jumps (e.g. #newsletter) clear the fixed navbar */
+    html { scroll-padding-top: 92px; }
+    #newsletter { scroll-margin-top: 92px; }
+
+    /* Accessibility: visible keyboard focus */
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* Gentle hero entrance (respects reduced-motion) */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-eyebrow { animation: heroRise .7s ease both; }
+      .hero h1      { animation: heroRise .7s ease .06s both; }
+      .hero-sub     { animation: heroRise .7s ease .14s both; }
+      .hero-buttons { animation: heroRise .7s ease .22s both; }
+      .hero-stats   { animation: heroRise .7s ease .30s both; }
+      @keyframes heroRise {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: none; }
+      }
+    }
+
+    /* Balanced hero stats */
+    .hero-stats { gap: 48px; }
+
+    /* Lens cards: gold accent line that draws in on hover/focus */
+    .lens-card { position: relative; }
+    .lens-card::after {
+      content: '';
+      position: absolute;
+      left: 32px; right: 32px; bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .lens-card:hover::after,
+    .lens-card:focus-visible::after { transform: scaleX(1); }
+
+    /* Spotlight responds to keyboard focus the same as hover */
+    .spotlight:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--gold-border-strong);
+    }
+
+    /* Optical balance for headlines */
+    .section-title,
+    .intro-statement { text-wrap: balance; }
+  </style>
 </head>
 <body>
+
+  <div class="landscape-nudge" id="landscapeNudge">
+    <div class="landscape-nudge-icon">📱</div>
+    <h2 class="landscape-nudge-title">Better in Landscape</h2>
+    <p class="landscape-nudge-sub">Rotate your device for the full museum experience.</p>
+    <button class="landscape-nudge-skip" id="nudgeSkip">Continue anyway</button>
+  </div>
 
   <!-- ── Navigation ── -->
   <nav class="navbar">
@@ -19,37 +101,87 @@
       <li><a href="ask-why.html">Ask Why</a></li>
     </ul>
     <div class="nav-right">
-      <input class="nav-search" type="text" placeholder="Search pioneers…" />
+      <input class="nav-search" type="text" placeholder="Search pioneers…" aria-label="Search pioneers" />
       <a href="#newsletter" class="subscribe-btn">Subscribe</a>
     </div>
   </nav>
 
-  <!-- ── Hero ── -->
+  <!-- ── Hero — split: text left / image right ── -->
   <section class="hero">
-    <canvas id="heroCanvas" class="hero-canvas"></canvas>
 
-    <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
-    <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
-    <div class="orbit orbit-3"><div class="orbit-dot"></div></div>
+    <!-- Left: content -->
+    <div class="hero-left">
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
 
-    <div class="hero-content">
-      <span class="eyebrow">A Museum of Forgotten Genius</span>
-      <h1>Ask<em>Why</em>.fyi</h1>
-      <p class="hero-sub">Why do some people change history and disappear from it?</p>
-      <div class="hero-buttons">
-        <a href="hidden-figures.html" class="btn-primary">Begin Exploring</a>
-        <a href="timeline.html" class="btn-secondary">View Timeline</a>
+      <div class="hero-content">
+        <div class="hero-eyebrow">"Questions Can Change Everything"</div>
+        <h1>Ask<em>Why</em>.fyi</h1>
+        <p class="hero-sub">Why do some people change history — and then disappear from it?</p>
+        <div class="hero-buttons">
+          <a href="hidden-figures.html" class="btn-primary">Begin Exploring</a>
+          <a href="timeline.html" class="btn-secondary">View Timeline</a>
+        </div>
+      </div>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <div class="scroll-line"></div>
+        <span class="scroll-label">Scroll</span>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">5+</span>
+          <span class="hero-stat-label">Pioneers</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">3</span>
+          <span class="hero-stat-label">Centuries</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">6</span>
+          <span class="hero-stat-label">Lenses</span>
+        </div>
       </div>
     </div>
 
-    <div class="hero-scroll">
-      <div class="scroll-line"></div>
-      <span>Scroll</span>
+    <!-- Right: background galaxy is painted by the .hero CSS background -->
+
+  </section>
+
+  <!-- ── Ticker ── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-inner">
+      <span class="ticker-item">Oliver Heaviside <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Tommy Flowers <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Mary Anning <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Hedy Lamarr <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Archie Cochrane <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Elizabeth Garrett Anderson <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Lise Meitner <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Forgotten Genius <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Oliver Heaviside <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Tommy Flowers <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Mary Anning <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Hedy Lamarr <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Archie Cochrane <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Elizabeth Garrett Anderson <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Lise Meitner <span class="ticker-sep">✦</span></span>
+      <span class="ticker-item">Forgotten Genius <span class="ticker-sep">✦</span></span>
+    </div>
+  </div>
+
+  <!-- ── Intro Statement ── -->
+  <section class="intro-section">
+    <h2 class="intro-statement">We do not dwell in the Palace of Truth. But what matters is the<em> asking.</em></h2>
+    <div class="intro-body">
+      <p>The equations in your physics textbook were written by someone history forgot. The computer that won World War II was built by a man sworn to secrecy for thirty years. The fossils that proved extinction was real were found by a working-class woman whose name never appeared in the papers.</p>
+      <p>AskWhy.fyi is dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
+      <a href="hidden-figures.html">Meet the pioneers →</a>
     </div>
   </section>
 
-  <!-- ── Featured Spotlight ── -->
-  <section class="section">
+  <!-- ── Spotlight ── -->
+  <section class="spotlight-section">
     <div class="section-header">
       <div>
         <p class="section-eyebrow">Featured Story</p>
@@ -58,38 +190,176 @@
       <a href="hidden-figures.html" class="see-all">All Pioneers →</a>
     </div>
 
-    <div class="spotlight">
-      <div class="spotlight-portrait">
-        <img src="images/heaviside.jpg" alt="Oliver Heaviside" />
-      </div>
-      <div class="spotlight-body">
-        <div class="spotlight-tags">
-          <span class="tag-pill">⚡ Innovation</span>
-          <span class="tag-pill">Hidden Figures</span>
+    <div class="spotlight-carousel" aria-roledescription="carousel" aria-label="Featured pioneers">
+      <div class="spotlight-viewport">
+        <div class="spotlight-track">
+
+          <!-- 1 · Heaviside -->
+          <div class="spotlight" data-href="heaviside.html" aria-label="Oliver Heaviside">
+            <div class="spotlight-portrait">
+              <img src="images/heaviside.jpg" alt="Portrait of Oliver Heaviside" loading="lazy" />
+            </div>
+            <div class="spotlight-body">
+              <div class="spotlight-tags">
+                <span class="tag-pill">Innovation</span>
+                <span class="tag-pill">Hidden Figures</span>
+              </div>
+              <p class="spotlight-dates">1850 — 1925 · London &amp; Devon</p>
+              <h3 class="spotlight-title">The Man Who Tamed the Electron — and Was Erased for It</h3>
+              <p class="spotlight-text">Oliver Heaviside rewrote Maxwell's equations, predicted the ionosphere, and invented operational calculus — all from a single rented room. Yet history barely knows his name.</p>
+              <a href="heaviside.html" class="btn-read">Read the Full Story →</a>
+            </div>
+          </div>
+
+          <!-- 2 · Hedy Lamarr -->
+          <div class="spotlight" data-href="hedy-lamarr.html" aria-label="Hedy Lamarr">
+            <div class="spotlight-portrait">
+              <img src="images/hedy.jpg" alt="Portrait of Hedy Lamarr" loading="lazy" />
+            </div>
+            <div class="spotlight-body">
+              <div class="spotlight-tags">
+                <span class="tag-pill">Innovation</span>
+                <span class="tag-pill">Hidden Figures</span>
+              </div>
+              <p class="spotlight-dates">1914 — 2000 · Vienna &amp; Hollywood</p>
+              <h3 class="spotlight-title">The Movie Star Who Drafted the Blueprint for Wireless</h3>
+              <p class="spotlight-text">A Hollywood icon by night and an inventor by instinct, Hedy Lamarr co-patented frequency hopping in 1942 — the seed of Wi-Fi, Bluetooth and GPS. The world credited her only decades later.</p>
+              <a href="hedy-lamarr.html" class="btn-read">Read the Full Story →</a>
+            </div>
+          </div>
+
+          <!-- 3 · Tommy Flowers -->
+          <div class="spotlight" data-href="flowers.html" aria-label="Tommy Flowers">
+            <div class="spotlight-portrait">
+              <img src="images/Tommy_Flowers.jpg" alt="Portrait of Tommy Flowers" loading="lazy" />
+            </div>
+            <div class="spotlight-body">
+              <div class="spotlight-tags">
+                <span class="tag-pill">Innovation</span>
+                <span class="tag-pill">Hidden Figures</span>
+              </div>
+              <p class="spotlight-dates">1905 — 1998 · London</p>
+              <h3 class="spotlight-title">The Engineer Who Built the First Computer — in Secret</h3>
+              <p class="spotlight-text">Tommy Flowers built Colossus, the world's first programmable electronic computer, to break German ciphers. The machines were dismantled and the work sealed for thirty years, so others were called "first."</p>
+              <a href="flowers.html" class="btn-read">Read the Full Story →</a>
+            </div>
+          </div>
+
+          <!-- 4 · Archie Cochrane -->
+          <div class="spotlight" data-href="cochrane.html" aria-label="Archie Cochrane">
+            <div class="spotlight-portrait">
+              <img src="images/Cochrane.jpg" alt="Portrait of Archie Cochrane" loading="lazy" />
+            </div>
+            <div class="spotlight-body">
+              <div class="spotlight-tags">
+                <span class="tag-pill">Scientific Revolutions</span>
+                <span class="tag-pill">Ask Why</span>
+              </div>
+              <p class="spotlight-dates">1909 — 1988 · Scotland &amp; Wales</p>
+              <h3 class="spotlight-title">The Doctor Who Asked Medicine to Prove It</h3>
+              <p class="spotlight-text">Archie Cochrane put one radical question to medicine: where is your evidence? His insistence on randomised trials reshaped how the world decides what actually works — after decades of resistance.</p>
+              <a href="cochrane.html" class="btn-read">Read the Full Story →</a>
+            </div>
+          </div>
+
+          <!-- 5 · Mary Anning -->
+          <div class="spotlight" data-href="mary-anning.html" aria-label="Mary Anning">
+            <div class="spotlight-portrait">
+              <img src="images/Marry.jpg" alt="Portrait of Mary Anning" loading="lazy" />
+            </div>
+            <div class="spotlight-body">
+              <div class="spotlight-tags">
+                <span class="tag-pill">Hidden Figures</span>
+                <span class="tag-pill">Scientific Revolutions</span>
+              </div>
+              <p class="spotlight-dates">1799 — 1847 · Lyme Regis</p>
+              <h3 class="spotlight-title">The Fossil Hunter Who Proved Extinction Was Real</h3>
+              <p class="spotlight-text">Mary Anning unearthed the creatures that rewrote the history of life from the cliffs of Lyme Regis. Barred from the scientific societies of her day, she watched men publish her finds under their own names.</p>
+              <a href="mary-anning.html" class="btn-read">Read the Full Story →</a>
+            </div>
+          </div>
+
+          <!-- 6 · Elizabeth Garrett Anderson -->
+          <div class="spotlight" data-href="elizabeth-garrett-anderson.html" aria-label="Elizabeth Garrett Anderson">
+            <div class="spotlight-portrait">
+              <img src="images/elizabeth.jpg" alt="Portrait of Elizabeth Garrett Anderson" loading="lazy" />
+            </div>
+            <div class="spotlight-body">
+              <div class="spotlight-tags">
+                <span class="tag-pill">Presence &amp; Legacy</span>
+                <span class="tag-pill">Hidden Figures</span>
+              </div>
+              <p class="spotlight-dates">1836 — 1917 · London &amp; Aldeburgh</p>
+              <h3 class="spotlight-title">The Woman Who Forced Medicine to Admit Her</h3>
+              <p class="spotlight-text">Elizabeth Garrett Anderson fought her way into a profession that refused women, becoming Britain's first qualified female physician — then opened the door for everyone who followed.</p>
+              <a href="elizabeth-garrett-anderson.html" class="btn-read">Read the Full Story →</a>
+            </div>
+          </div>
+
         </div>
-        <p class="spotlight-dates">1850 — 1925 · London &amp; Devon</p>
-        <h3 class="spotlight-title">The Man Who Tamed the Electron — and Was Erased for It</h3>
-        <p class="spotlight-text">Oliver Heaviside rewrote Maxwell's equations, predicted the ionosphere, and invented operational calculus — all from a single rented room. Yet history barely knows his name.</p>
-        <p class="spotlight-meta">14 min read</p>
-        <a href="heaviside.html" class="btn-read">Read the Full Story</a>
+      </div>
+
+      <div class="spotlight-nav">
+        <button class="spot-btn spot-prev" type="button" aria-label="Previous highlight">‹</button>
+        <div class="spot-dots" role="tablist" aria-label="Choose a highlight"></div>
+        <button class="spot-btn spot-next" type="button" aria-label="Next highlight">›</button>
       </div>
     </div>
   </section>
 
-  <div class="divider"></div>
+  <!-- ── Marquee ── -->
+  <div class="marquee-section">
+    <div class="marquee-track" id="marqueeTrack">
+      <div class="marquee-inner" id="marqueeInner">
+        <span class="marquee-item"><a href="heaviside.html">Oliver Heaviside</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="flowers.html">Tommy Flowers</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="cochrane.html">Archie Cochrane</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="mary-anning.html">Mary Anning</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="elizabeth-garrett-anderson.html">Elizabeth Garrett Anderson</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="hedy-lamarr.html">Hedy Lamarr</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="timeline.html">Lise Meitner</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="timeline.html">Thomas Cochrane</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="heaviside.html">Oliver Heaviside</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="flowers.html">Tommy Flowers</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="cochrane.html">Archie Cochrane</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="mary-anning.html">Mary Anning</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="elizabeth-garrett-anderson.html">Elizabeth Garrett Anderson</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="hedy-lamarr.html">Hedy Lamarr</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="timeline.html">Lise Meitner</a></span>
+        <span class="marquee-sep">·</span>
+        <span class="marquee-item"><a href="timeline.html">Thomas Cochrane</a></span>
+        <span class="marquee-sep">·</span>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Newly Added ── -->
-  <section class="section">
+  <section class="cards-section">
     <div class="section-header">
       <div>
         <p class="section-eyebrow">Just Published</p>
         <h2 class="section-title">Newly Added Discoveries</h2>
       </div>
     </div>
-
     <div class="cards-grid">
       <a href="hedy-lamarr.html" class="card">
-        <div class="card-thumb">⚡</div>
+        <div class="card-thumb">
+          <img src="images/hedy.jpg" alt="Portrait of Hedy Lamarr" loading="lazy">
+        </div>
         <div class="card-body">
           <p class="card-tag">Innovation</p>
           <h3 class="card-title">The Actress Who Invented WiFi's Foundation</h3>
@@ -97,151 +367,7 @@
         </div>
       </a>
       <a href="flowers.html" class="card">
-        <div class="card-thumb">⚓</div>
-        <div class="card-body">
-          <p class="card-tag">Presence &amp; Legacy</p>
-          <h3 class="card-title">The Admiral Too Brilliant to Trust</h3>
-          <p class="card-excerpt">Thomas Cochrane inspired naval fiction's greatest heroes — and was nearly erased from naval history.</p>
-        </div>
-      </a>
-      <a href="ask-why.html" class="card">
-        <div class="card-thumb">🔬</div>
-        <div class="card-body">
-          <p class="card-tag">Ask Why</p>
-          <h3 class="card-title">The Attribution Problem Explained</h3>
-          <p class="card-excerpt">Why credit flows upward to those who already have status, and away from those who need it.</p>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── Timeline Strip ── -->
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="section-eyebrow">Across the Centuries</p>
-        <h2 class="section-title">A Global Timeline of<br>Overlooked Genius</h2>
-      </div>
-      <a href="timeline.html" class="see-all">Full Timeline →</a>
-    </div>
-
-    <div class="filter-tabs">
-      <button class="filter-tab active">All</button>
-      <button class="filter-tab">Innovation</button>
-      <button class="filter-tab">Science</button>
-      <button class="filter-tab">Exploration</button>
-    </div>
-
-    <div class="timeline-strip">
-      <div class="timeline-card">
-        <div class="timeline-year">1799</div>
-        <div class="timeline-card-title">Mary Anning's First Fossil Find</div>
-        <p class="timeline-card-text">A child in Lyme Regis discovers an ichthyosaur skeleton, launching a career that would redefine paleontology — without credit, for decades.</p>
-      </div>
-      <div class="timeline-card">
-        <div class="timeline-year">1809</div>
-        <div class="timeline-card-title">Cochrane's Fireships at Aix Roads</div>
-        <p class="timeline-card-text">Thomas Cochrane executes one of the most audacious naval attacks in history — and is court-martialed within the year.</p>
-      </div>
-      <div class="timeline-card">
-        <div class="timeline-year">1885</div>
-        <div class="timeline-card-title">Heaviside Rewrites Maxwell</div>
-        <p class="timeline-card-text">Twenty quaternion equations become four vector equations. The notation engineers still use today is born in a rented room.</p>
-      </div>
-      <div class="timeline-card">
-        <div class="timeline-year">1938</div>
-        <div class="timeline-card-title">Meitner Explains Fission</div>
-        <p class="timeline-card-text">Lise Meitner provides the theoretical explanation of nuclear fission. The Nobel goes to her former collaborator.</p>
-      </div>
-      <div class="timeline-card">
-        <div class="timeline-year">1943</div>
-        <div class="timeline-card-title">Flowers Builds Colossus</div>
-        <p class="timeline-card-text">Tommy Flowers constructs the world's first programmable electronic computer to break Nazi codes. The project stays secret for 30 years.</p>
-      </div>
-      <div class="timeline-card">
-        <div class="timeline-year">1972</div>
-        <div class="timeline-card-title">Cochrane Founds EBM</div>
-        <p class="timeline-card-text">Archie Cochrane publishes his landmark call for evidence-based medicine. The medical establishment is not pleased.</p>
-      </div>
-    </div>
-    <div class="timeline-scroll-bar">
-      <div class="timeline-scroll-progress"></div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── Six Lenses ── -->
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="section-eyebrow">Explore by Theme</p>
-        <h2 class="section-title">Six Lenses on a Forgotten World</h2>
-      </div>
-    </div>
-
-    <div class="lenses-grid">
-      <a href="hidden-figures.html" class="lens-card">
-        <div class="lens-num">01</div>
-        <div class="lens-icon">🕯️</div>
-        <h3 class="lens-title">Presence &amp; Legacy</h3>
-        <p class="lens-desc">How the influence of a person outlives their name — and how names get lost along the way.</p>
-        <span class="lens-count">8 Articles</span>
-      </a>
-      <a href="innovation.html" class="lens-card">
-        <div class="lens-num">02</div>
-        <div class="lens-icon">⚡</div>
-        <h3 class="lens-title">Innovation</h3>
-        <p class="lens-desc">The breakthroughs that quietly became the infrastructure of everyday life.</p>
-        <span class="lens-count">12 Articles</span>
-      </a>
-      <a href="hidden-figures.html" class="lens-card">
-        <div class="lens-num">03</div>
-        <div class="lens-icon">🔍</div>
-        <h3 class="lens-title">Hidden Figures</h3>
-        <p class="lens-desc">The people behind the discovery — written out of the textbook, the patent, the prize.</p>
-        <span class="lens-count">10 Articles</span>
-      </a>
-      <a href="timeline.html" class="lens-card">
-        <div class="lens-num">04</div>
-        <div class="lens-icon">⚙️</div>
-        <h3 class="lens-title">Forgotten Technologies</h3>
-        <p class="lens-desc">Devices and methods the ancient and modern world built, lost, and had to reinvent.</p>
-        <span class="lens-count">6 Articles</span>
-      </a>
-      <a href="ask-why.html" class="lens-card">
-        <div class="lens-num">05</div>
-        <div class="lens-icon">🧬</div>
-        <h3 class="lens-title">Scientific Revolutions</h3>
-        <p class="lens-desc">The moments a single idea, resisted for decades, quietly rewrote the rules.</p>
-        <span class="lens-count">7 Articles</span>
-      </a>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── Most Read ── -->
-  <section class="section">
-    <div class="section-header">
-      <div>
-        <p class="section-eyebrow">Reader Favorites</p>
-        <h2 class="section-title">Most Read Articles</h2>
-      </div>
-    </div>
-    <div class="cards-grid">
-      <a href="heaviside.html" class="card">
-        <div class="card-thumb">⚡</div>
-        <div class="card-body">
-          <p class="card-tag">Innovation</p>
-          <h3 class="card-title">The Engineer History Deleted</h3>
-          <p class="card-excerpt">Oliver Heaviside changed how we talk about electricity. Almost no one can say his name.</p>
-        </div>
-      </a>
-      <a href="flowers.html" class="card">
-        <div class="card-thumb">💻</div>
+        <div class="card-thumb" aria-hidden="true">💻</div>
         <div class="card-body">
           <p class="card-tag">Hidden Figures</p>
           <h3 class="card-title">The Machine That Won the War Twice</h3>
@@ -249,34 +375,131 @@
         </div>
       </a>
       <a href="cochrane.html" class="card">
-        <div class="card-thumb">⚗️</div>
+        <div class="card-thumb" aria-hidden="true">⚗️</div>
         <div class="card-body">
           <p class="card-tag">Scientific Revolutions</p>
           <h3 class="card-title">The Man Who Asked Doctors to Prove It</h3>
-          <p class="card-excerpt">Archie Cochrane had one simple demand: show me the evidence. Medicine resisted for decades.</p>
+          <p class="card-excerpt">Archie Cochrane had one demand: show me the evidence. Medicine resisted for decades.</p>
         </div>
       </a>
     </div>
   </section>
 
+  <!-- ── Timeline Strip ── -->
+  <section class="timeline-section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Across the Centuries</p>
+        <h2 class="section-title">A Global Timeline of<br>Overlooked Genius</h2>
+      </div>
+      <a href="timeline.html" class="see-all">Full Timeline →</a>
+    </div>
+    <div class="timeline-strip">
+      <a href="mary-anning.html" class="timeline-card">
+        <div class="timeline-year">1799</div>
+        <div class="timeline-card-title">Mary Anning's First Fossil Find</div>
+        <p class="timeline-card-text">A child in Lyme Regis discovers an ichthyosaur — without credit, for decades.</p>
+      </a>
+      <div class="timeline-card">
+        <div class="timeline-year">1809</div>
+        <div class="timeline-card-title">Cochrane's Fireships at Aix Roads</div>
+        <p class="timeline-card-text">One of the most audacious naval attacks in history. Court-martialed within the year.</p>
+      </div>
+      <a href="heaviside.html" class="timeline-card">
+        <div class="timeline-year">1885</div>
+        <div class="timeline-card-title">Heaviside Rewrites Maxwell</div>
+        <p class="timeline-card-text">Twenty equations become four. The notation engineers still use today, born in a rented room.</p>
+      </a>
+      <div class="timeline-card">
+        <div class="timeline-year">1938</div>
+        <div class="timeline-card-title">Meitner Explains Fission</div>
+        <p class="timeline-card-text">Lise Meitner explains nuclear fission. The Nobel goes to her collaborator.</p>
+      </div>
+      <a href="flowers.html" class="timeline-card">
+        <div class="timeline-year">1943</div>
+        <div class="timeline-card-title">Flowers Builds Colossus</div>
+        <p class="timeline-card-text">The world's first programmable computer. Secret for 30 years.</p>
+      </a>
+      <a href="cochrane.html" class="timeline-card">
+        <div class="timeline-year">1972</div>
+        <div class="timeline-card-title">Cochrane Founds EBM</div>
+        <p class="timeline-card-text">Archie Cochrane demands proof. The medical establishment is not pleased.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Six Lenses ── -->
+  <section class="lenses-section">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Explore by Theme</p>
+        <h2 class="section-title">Six Lenses on a Forgotten World</h2>
+      </div>
+    </div>
+    <div class="lenses-grid">
+      <a href="hidden-figures.html" class="lens-card" data-num="01">
+        <span class="lens-num">01</span>
+        <span class="lens-icon" aria-hidden="true">🕯️</span>
+        <h3 class="lens-title">Presence &amp; Legacy</h3>
+        <p class="lens-desc">How influence outlives a name — and how names get lost along the way.</p>
+        <span class="lens-count">8 Articles</span>
+      </a>
+      <a href="innovation.html" class="lens-card" data-num="02">
+        <span class="lens-num">02</span>
+        <span class="lens-icon" aria-hidden="true">⚡</span>
+        <h3 class="lens-title">Innovation</h3>
+        <p class="lens-desc">The breakthroughs that quietly became the infrastructure of everyday life.</p>
+        <span class="lens-count">12 Articles</span>
+      </a>
+      <a href="hidden-figures.html" class="lens-card" data-num="03">
+        <span class="lens-num">03</span>
+        <span class="lens-icon" aria-hidden="true">🔍</span>
+        <h3 class="lens-title">Hidden Figures</h3>
+        <p class="lens-desc">The people written out of the textbook, the patent, the prize.</p>
+        <span class="lens-count">10 Articles</span>
+      </a>
+      <a href="timeline.html" class="lens-card" data-num="04">
+        <span class="lens-num">04</span>
+        <span class="lens-icon" aria-hidden="true">⚙️</span>
+        <h3 class="lens-title">Forgotten Technologies</h3>
+        <p class="lens-desc">Devices the ancient and modern world built, lost, and had to reinvent.</p>
+        <span class="lens-count">6 Articles</span>
+      </a>
+      <a href="ask-why.html" class="lens-card" data-num="05">
+        <span class="lens-num">05</span>
+        <span class="lens-icon" aria-hidden="true">🧬</span>
+        <h3 class="lens-title">Scientific Revolutions</h3>
+        <p class="lens-desc">The moments a single idea, resisted for decades, quietly rewrote the rules.</p>
+        <span class="lens-count">7 Articles</span>
+      </a>
+      <a href="ask-why.html" class="lens-card" data-num="06">
+        <span class="lens-num">06</span>
+        <span class="lens-icon" aria-hidden="true">❓</span>
+        <h3 class="lens-title">Ask Why</h3>
+        <p class="lens-desc">Deep questions about credit, power, and who gets to write history.</p>
+        <span class="lens-count">6 Articles</span>
+      </a>
+    </div>
+  </section>
+
   <!-- ── Newsletter ── -->
-  <div id="newsletter">
+  <section class="newsletter-section" id="newsletter">
     <div class="newsletter">
-      <h2 class="newsletter-title">One Person. One Story.<br>Every Thursday.</h2>
-      <p class="newsletter-sub">Join readers who get a single 800-word profile of an overlooked pioneer delivered to their inbox — free, forever.</p>
+      <h2 class="newsletter-title">One Person.<br>One Story. Every Thursday.</h2>
+      <p class="newsletter-sub">A single 800-word profile of an overlooked pioneer, delivered free to your inbox.</p>
       <form class="newsletter-form" onsubmit="return false;">
-        <input class="newsletter-input" type="email" placeholder="you@example.com" />
+        <input class="newsletter-input" type="email" placeholder="you@example.com" aria-label="Email address" />
         <button class="newsletter-btn" type="submit">Subscribe</button>
       </form>
-      <p class="newsletter-fine">No spam. Unsubscribe anytime. One email per week.</p>
+      <p class="newsletter-fine">No spam. Unsubscribe anytime.</p>
     </div>
-  </div>
+  </section>
 
   <!-- ── Footer ── -->
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">Ask<span style="color:var(--gold)">Why</span>.fyi</a>
+        <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
         <p class="footer-desc">A digital museum dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
       </div>
       <div>
@@ -285,25 +508,123 @@
           <li><a href="hidden-figures.html">Presence &amp; Legacy</a></li>
           <li><a href="innovation.html">Innovation</a></li>
           <li><a href="hidden-figures.html">Hidden Figures</a></li>
-          <li><a href="timeline.html">Forgotten Technologies</a></li>
+          <li><a href="timeline.html">Timeline</a></li>
           <li><a href="ask-why.html">Ask Why</a></li>
         </ul>
       </div>
       <div>
-        <h4 class="footer-col-title">Site</h4>
+        <h4 class="footer-col-title">Figures</h4>
         <ul class="footer-links">
-          <li><a href="timeline.html">Timeline</a></li>
-          <li><a href="hidden-figures.html">Explore</a></li>
-          <li><a href="#">Search</a></li>
-          <li><a href="#">About</a></li>
+          <li><a href="heaviside.html">Oliver Heaviside</a></li>
+          <li><a href="flowers.html">Tommy Flowers</a></li>
+          <li><a href="cochrane.html">Archie Cochrane</a></li>
+          <li><a href="mary-anning.html">Mary Anning</a></li>
+          <li><a href="hedy-lamarr.html">Hedy Lamarr</a></li>
+          <li><a href="elizabeth-garrett-anderson.html">Elizabeth Garrett Anderson</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      © 2025 AskWhy.fyi — Accuracy first, narrative second.
+      <span>© 2025 AskWhy.fyi — Accuracy first, narrative second.</span>
+      <span>A digital museum</span>
     </div>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    /* ── Hero gold-particle field (sized to the hero's left column) ── */
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+      const left = canvas.parentElement;
+      canvas.width  = left.offsetWidth;
+      canvas.height = left.offsetHeight;
+    }
+
+    function init() {
+      particles = [];
+      const count = Math.floor((canvas.width * canvas.height) / 20000);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.4 + 0.3,
+          alpha: Math.random() * 0.28 + 0.06,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(140,100,30,${p.alpha})`;
+        ctx.fill();
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+      });
+      requestAnimationFrame(draw);
+    }
+
+    resize(); init(); draw();
+    window.addEventListener('resize', () => { resize(); init(); });
+
+    /* ── Fade-in for the intro block only ──
+       (cards, lenses, timeline and spotlight are handled in script.js,
+       so they are intentionally NOT observed again here.) */
+    const fadeEls = document.querySelectorAll('.intro-statement, .intro-body');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'translateY(0)';
+          }, i * 55);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    fadeEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity .55s ease, transform .55s ease';
+      io.observe(el);
+    });
+
+    /* ── Navbar scroll state ── */
+    window.addEventListener('scroll', () => {
+      document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    /* ── Landscape nudge ── */
+    const nudge = document.getElementById('landscapeNudge');
+    const skip  = document.getElementById('nudgeSkip');
+    let dismissed = sessionStorage.getItem('nudgeDismissed');
+
+    function checkOrientation() {
+      if (!dismissed && window.innerWidth < 768 && window.innerHeight > window.innerWidth) {
+        nudge.classList.add('active');
+      } else {
+        nudge.classList.remove('active');
+      }
+    }
+    skip.addEventListener('click', () => {
+      dismissed = true;
+      sessionStorage.setItem('nudgeDismissed', '1');
+      nudge.classList.remove('active');
+    });
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', () => setTimeout(checkOrientation, 300));
+    setTimeout(checkOrientation, 1000);
+  </script>
 </body>
 </html>

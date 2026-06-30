@@ -20,69 +20,17 @@ navLinks.forEach(link => {
   }
 });
 
-// ── Gold particle canvas (hero only) ──
-const canvas = document.getElementById('heroCanvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  function createParticles() {
-    particles = [];
-    const count = Math.floor((canvas.width * canvas.height) / 20000);
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.5 + 0.5,
-        alpha: Math.random() * 0.6 + 0.1,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-      });
-    }
-  }
-
-  function drawParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(201,168,76,${p.alpha})`;
-      ctx.fill();
-
-      p.x += p.vx;
-      p.y += p.vy;
-
-      if (p.x < 0) p.x = canvas.width;
-      if (p.x > canvas.width) p.x = 0;
-      if (p.y < 0) p.y = canvas.height;
-      if (p.y > canvas.height) p.y = 0;
-    });
-    requestAnimationFrame(drawParticles);
-  }
-
-  resize();
-  createParticles();
-  drawParticles();
-  window.addEventListener('resize', () => { resize(); createParticles(); });
-
-  // Parallax on mouse move
-  const hero = document.querySelector('.hero');
-  if (hero) {
-    document.addEventListener('mousemove', e => {
-      const rx = (e.clientX / window.innerWidth - .5) * 12;
-      const ry = (e.clientY / window.innerHeight - .5) * 8;
-      hero.style.backgroundPosition = `calc(50% + ${rx}px) calc(50% + ${ry}px)`;
-    });
-  }
-}
+/* NOTE:
+   The hero gold-particle canvas is intentionally NOT handled here.
+   index.html runs its own particle system inline, sized to the hero's
+   left column. Running a second copy here caused two competing
+   requestAnimationFrame loops on the same <canvas>. */
 
 // ── Intersection observer fade-in ──
-const fadeEls = document.querySelectorAll('.card, .lens-card, .figure-card, .timeline-card, .spotlight, .question-item, .timeline-item');
+//   NOTE: the spotlight CAROUSEL fades in as a single block (.spotlight-carousel),
+//   never the individual .spotlight slides — those are positioned off-screen by the
+//   carousel and would otherwise stay invisible because they never intersect.
+const fadeEls = document.querySelectorAll('.card, .lens-card, .figure-card, .timeline-card, .spotlight-carousel, .question-item, .timeline-item');
 if ('IntersectionObserver' in window) {
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -101,6 +49,86 @@ if ('IntersectionObserver' in window) {
     io.observe(el);
   });
 }
+
+// ── Spotlight carousel (index) ──
+(function () {
+  const carousel = document.querySelector('.spotlight-carousel');
+  if (!carousel) return;
+
+  const track    = carousel.querySelector('.spotlight-track');
+  const slides   = Array.from(track.querySelectorAll('.spotlight'));
+  const prevBtn  = carousel.querySelector('.spot-prev');
+  const nextBtn  = carousel.querySelector('.spot-next');
+  const dotsWrap = carousel.querySelector('.spot-dots');
+  if (slides.length <= 1) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const INTERVAL = 7000;
+  let index = 0;
+  let timer = null;
+
+  // Build the dot indicators
+  const dots = slides.map((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'spot-dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', 'Show highlight ' + (i + 1) + ' of ' + slides.length);
+    dot.addEventListener('click', () => { go(i); restart(); });
+    dotsWrap.appendChild(dot);
+    return dot;
+  });
+
+  function update() {
+    track.style.transform = 'translateX(' + (-index * 100) + '%)';
+    dots.forEach((d, i) => {
+      d.classList.toggle('is-active', i === index);
+      d.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+    slides.forEach((s, i) => {
+      const active = i === index;
+      s.setAttribute('aria-hidden', active ? 'false' : 'true');
+      // Keep keyboard focus out of off-screen slides
+      s.querySelectorAll('a').forEach(a => { a.tabIndex = active ? 0 : -1; });
+    });
+  }
+
+  function go(i)   { index = (i + slides.length) % slides.length; update(); }
+  function next()  { go(index + 1); }
+  function prev()  { go(index - 1); }
+
+  function start() { if (!reduceMotion) timer = setInterval(next, INTERVAL); }
+  function stop()  { clearInterval(timer); timer = null; }
+  function restart() { stop(); start(); }
+
+  if (nextBtn) nextBtn.addEventListener('click', () => { next(); restart(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { prev(); restart(); });
+
+  // Pause auto-advance while the reader is interacting
+  carousel.addEventListener('mouseenter', stop);
+  carousel.addEventListener('mouseleave', start);
+  carousel.addEventListener('focusin', stop);
+  carousel.addEventListener('focusout', start);
+
+  // Whole card is clickable, but real links inside still work normally
+  slides.forEach(slide => {
+    const href = slide.getAttribute('data-href');
+    if (!href) return;
+    slide.addEventListener('click', e => {
+      if (e.target.closest('a')) return;
+      window.location.href = href;
+    });
+  });
+
+  // Arrow-key support when the carousel has focus
+  carousel.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { next(); restart(); }
+    if (e.key === 'ArrowLeft')  { prev(); restart(); }
+  });
+
+  update();
+  start();
+})();
 
 // ── Filter tabs ──
 const filterTabs = document.querySelectorAll('.filter-tab');

@@ -6,114 +6,27 @@
   <title>Hidden Figures — AskWhy.fyi</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-
-    .figures-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
-
-    .figure-card {
-      background: var(--navy-card);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform .3s, border-color .3s, box-shadow .3s;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .figure-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(201,168,76,.25);
-      box-shadow: 0 24px 60px rgba(0,0,0,.5);
-    }
-
-    /* Big icon area */
+    /* Page-scoped: real portraits inside the figure cards.
+       Matches the 3/4 portrait framing used on the heaviside bio page so
+       faces aren't cropped. Everything else comes from the shared style.css. */
+    .figures-grid { align-items: start; }        /* cards size to content, no stretch */
     .figure-img {
-      flex: 1;
-      min-height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
+      aspect-ratio: 3 / 4;                        /* tall portrait window like heaviside */
+      min-height: 0;
+      flex: 0 0 auto;
     }
-
-    .figure-icon {
-      font-size: 64px;
-      opacity: .22;
-      transition: opacity .3s, transform .3s;
-      filter: drop-shadow(0 0 20px currentColor);
-    }
-
-    .figure-card:hover .figure-icon {
-      opacity: .35;
-      transform: scale(1.08);
-    }
-
-    /* Subtle radial glow behind icon */
-    .figure-img::before {
-      content: '';
+    .figure-img img {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(201,168,76,.04) 0%, transparent 70%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;               /* anchor on the face */
+      filter: sepia(14%) contrast(1.04);
+      transition: transform .5s ease;
+      z-index: 1;
     }
-
-    /* Bottom text block */
-    .figure-body {
-      padding: 24px 26px 28px;
-      border-top: 1px solid rgba(255,255,255,.05);
-    }
-
-    .figure-dates {
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: .5px;
-      margin-bottom: 8px;
-    }
-
-    .figure-name {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 6px;
-      line-height: 1.2;
-    }
-
-    .figure-title {
-      font-size: 13px;
-      color: var(--gold);
-      font-style: italic;
-      margin-bottom: 14px;
-    }
-
-    .figure-excerpt {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.65;
-    }
-
-    /* Icon colours per figure */
-    .icon-heaviside  { color: #c9a84c; }
-    .icon-flowers    { color: #6baed6; }
-    .icon-cochrane   { color: #74c476; }
-    .icon-anning     { color: #3d9970; }
-    .icon-anderson   { color: #9b59b6; }
-
-    @media (max-width: 1100px) {
-      .figures-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 760px) {
-      .figures-grid { grid-template-columns: repeat(2, 1fr); }
-      .figure-img { min-height: 160px; }
-    }
-    @media (max-width: 480px) {
-      .figures-grid { grid-template-columns: 1fr; }
-    }
+    .figure-card:hover .figure-img img { transform: scale(1.04); }
   </style>
 </head>
 <body>
@@ -121,6 +34,7 @@
   <nav class="navbar">
     <a href="index.html" class="logo">Ask<span>Why</span>.fyi</a>
     <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
       <li><a href="hidden-figures.html" class="active">Explore</a></li>
       <li><a href="innovation.html">Innovation</a></li>
       <li><a href="hidden-figures.html">Hidden Figures</a></li>
@@ -128,7 +42,7 @@
       <li><a href="ask-why.html">Ask Why</a></li>
     </ul>
     <div class="nav-right">
-      <input class="nav-search" type="text" placeholder="Search pioneers…" />
+      <input class="nav-search" type="text" placeholder="Search pioneers…" aria-label="Search pioneers" />
       <a href="index.html#newsletter" class="subscribe-btn">Subscribe</a>
     </div>
   </nav>
@@ -152,7 +66,7 @@
 
       <a href="heaviside.html" class="figure-card">
         <div class="figure-img">
-          <span class="figure-icon icon-heaviside">⚡</span>
+          <img src="images/heaviside.jpg" alt="Portrait of Oliver Heaviside" loading="lazy">
         </div>
         <div class="figure-body">
           <p class="figure-dates">1850 — 1925</p>
@@ -164,7 +78,7 @@
 
       <a href="flowers.html" class="figure-card">
         <div class="figure-img">
-          <span class="figure-icon icon-flowers">💻</span>
+          <img src="images/Tommy_Flowers.jpg" alt="Portrait of Tommy Flowers" loading="lazy">
         </div>
         <div class="figure-body">
           <p class="figure-dates">1905 — 1998</p>
@@ -176,7 +90,7 @@
 
       <a href="cochrane.html" class="figure-card">
         <div class="figure-img">
-          <span class="figure-icon icon-cochrane">🔬</span>
+          <img src="images/Cochrane.jpg" alt="Portrait of Archie Cochrane" loading="lazy">
         </div>
         <div class="figure-body">
           <p class="figure-dates">1909 — 1988</p>
@@ -188,7 +102,7 @@
 
       <a href="mary-anning.html" class="figure-card">
         <div class="figure-img">
-          <span class="figure-icon icon-anning">🦕</span>
+          <img src="images/Marry.jpg" alt="Portrait of Mary Anning" loading="lazy">
         </div>
         <div class="figure-body">
           <p class="figure-dates">1799 — 1847</p>
@@ -200,13 +114,25 @@
 
       <a href="elizabeth-garrett-anderson.html" class="figure-card">
         <div class="figure-img">
-          <span class="figure-icon icon-anderson">🩺</span>
+          <img src="images/elizabeth.jpg" alt="Portrait of Elizabeth Garrett Anderson" loading="lazy">
         </div>
         <div class="figure-body">
           <p class="figure-dates">1836 — 1917</p>
           <h3 class="figure-name">Elizabeth Garrett Anderson</h3>
           <p class="figure-title">First Female Doctor in England</p>
           <p class="figure-excerpt">Fought every institution that tried to stop her from practising medicine. Then built a hospital that outlasted them all.</p>
+        </div>
+      </a>
+
+      <a href="hedy-lamarr.html" class="figure-card">
+        <div class="figure-img">
+          <img src="images/hedy.jpg" alt="Portrait of Hedy Lamarr" loading="lazy">
+        </div>
+        <div class="figure-body">
+          <p class="figure-dates">1914 — 2000</p>
+          <h3 class="figure-name">Hedy Lamarr</h3>
+          <p class="figure-title">The Inventor Behind Modern Wireless</p>
+          <p class="figure-excerpt">Co-patented frequency hopping in 1942 — the seed of Wi-Fi, Bluetooth and GPS. Credited as a movie star, not an inventor, for decades.</p>
         </div>
       </a>
 
@@ -217,7 +143,7 @@
     <h2 class="newsletter-title">One Person. One Story. Every Thursday.</h2>
     <p class="newsletter-sub">Join readers who get a single 800-word profile of an overlooked pioneer delivered to their inbox.</p>
     <form class="newsletter-form" onsubmit="return false;">
-      <input class="newsletter-input" type="email" placeholder="you@example.com" />
+      <input class="newsletter-input" type="email" placeholder="you@example.com" aria-label="Email address" />
       <button class="newsletter-btn" type="submit">Subscribe</button>
     </form>
     <p class="newsletter-fine">No spam. Unsubscribe anytime.</p>
