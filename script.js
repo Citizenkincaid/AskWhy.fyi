@@ -171,3 +171,76 @@ if (timelineStrip && scrollProgress) {
     scrollProgress.style.width = Math.min(100, Math.max(5, pct + 5)) + '%';
   });
 }
+/* ============================================
+   Mobile menu (hamburger)
+   Built from the existing .nav-links so every page
+   gets a working phone menu with no HTML changes.
+   ============================================ */
+(function () {
+  const navbar   = document.querySelector('.navbar');
+  const navLinks = document.querySelector('.nav-links');
+  if (!navbar || !navLinks) return;
+  if (document.querySelector('.nav-toggle')) return; // guard against double-init
+
+  // — Hamburger button —
+  const toggle = document.createElement('button');
+  toggle.className = 'nav-toggle';
+  toggle.type = 'button';
+  toggle.setAttribute('aria-label', 'Open menu');
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.innerHTML = '<span></span><span></span><span></span>';
+
+  const navRight = navbar.querySelector('.nav-right');
+  if (navRight) navRight.appendChild(toggle);
+  else navbar.appendChild(toggle);
+
+  // — Slide-down panel —
+  const menu = document.createElement('div');
+  menu.className = 'mobile-menu';
+  menu.id = 'mobileMenu';
+
+  const search = document.createElement('input');
+  search.type = 'text';
+  search.className = 'mobile-search';
+  search.placeholder = 'Search pioneers…';
+  search.setAttribute('aria-label', 'Search pioneers');
+
+  const list = document.createElement('ul');
+  navLinks.querySelectorAll('a').forEach(link => {
+    const li = document.createElement('li');
+    const a  = document.createElement('a');
+    a.href = link.getAttribute('href');
+    a.textContent = link.textContent.trim();
+    if (link.classList.contains('active')) a.classList.add('active');
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+
+  menu.appendChild(search);
+  menu.appendChild(list);
+  navbar.insertAdjacentElement('afterend', menu);
+
+  // — Open / close —
+  function openMenu() {
+    menu.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+    document.body.classList.add('menu-open');
+  }
+  function closeMenu() {
+    menu.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+    document.body.classList.remove('menu-open');
+  }
+  function toggleMenu() {
+    menu.classList.contains('is-open') ? closeMenu() : openMenu();
+  }
+
+  toggle.addEventListener('click', toggleMenu);
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+})();

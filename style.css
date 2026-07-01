@@ -1387,3 +1387,711 @@ input:focus-visible,
   .spotlight-nav { gap: 14px; margin-top: 22px; }
   .spot-btn { width: 42px; height: 42px; font-size: 20px; }
 }
+/* ══════════════════════════════════════════
+   MOBILE MENU  (hamburger)
+   Added: gives phones a real way to navigate.
+   Uses only existing sand/gold tokens — no new colours,
+   no background-colour changes.
+   The button + panel are injected by script.js on every page.
+══════════════════════════════════════════ */
+.nav-toggle {
+  display: none;                 /* hidden on desktop; revealed ≤768px */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-sm);
+  background: rgba(255,249,236,.7);
+  box-shadow: var(--shadow-sm) inset;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: var(--gold-dark);
+  border-radius: 2px;
+  transition: transform .3s ease, opacity .2s ease;
+}
+.nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Slide-down panel */
+.mobile-menu {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 190;                  /* just under the navbar (200) */
+  padding: 84px 24px 28px;
+  background: linear-gradient(180deg, rgba(245,232,199,.99) 0%, rgba(238,217,165,.99) 100%);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border-bottom: 1px solid var(--gold-border);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  max-height: 100vh;
+  overflow-y: auto;
+  transition: transform .38s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+}
+.mobile-menu.is-open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+.mobile-menu ul { list-style: none; }
+.mobile-menu li { border-top: 1px solid var(--gold-border); }
+.mobile-menu li:last-child { border-bottom: 1px solid var(--gold-border); }
+.mobile-menu a {
+  display: block;
+  padding: 16px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transition: color .2s ease, padding-left .2s ease;
+}
+.mobile-menu a:hover,
+.mobile-menu a.active { color: var(--gold-dark); padding-left: 14px; }
+
+.mobile-menu .mobile-search {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-sm);
+  background: rgba(255,249,236,.8);
+  color: var(--ink-1);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+}
+.mobile-menu .mobile-search:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184,134,11,.12);
+}
+
+/* Stop the page scrolling behind an open menu */
+body.menu-open { overflow: hidden; }
+
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+}
+@media (min-width: 769px) {
+  .nav-toggle, .mobile-menu { display: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MODERN POLISH LAYER
+   Purely cosmetic refinement. No background-colour changes,
+   no structural/layout changes — only shadows, easing, hover
+   accents, button sheen and typography crispness.
+   Appended last so it refines the existing rules cleanly.
+══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Smooth, contemporary easing curves */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-soft: cubic-bezier(.4, 0, .2, 1);
+
+  /* Softer, more diffuse layered shadows (modern depth) */
+  --shadow-sm: 0 1px 2px rgba(90,62,18,.05), 0 3px 10px rgba(90,62,18,.05);
+  --shadow-md: 0 2px 4px rgba(90,62,18,.05), 0 12px 28px rgba(90,62,18,.09);
+  --shadow-lg: 0 4px 10px rgba(90,62,18,.07), 0 26px 60px rgba(90,62,18,.13);
+  --shadow-xl: 0 8px 20px rgba(90,62,18,.08), 0 44px 96px rgba(90,62,18,.17);
+}
+
+/* ── Typography crispness ──
+   text-wrap keeps headlines from leaving orphans; ignored by
+   older browsers, so it degrades gracefully. */
+.hero h1, .page-hero h1, .bio-name,
+.section-title, .intro-statement,
+.spotlight-title, .newsletter-title,
+.card-title, .lens-title, .figure-name,
+.timeline-card-title, .bio-article h2 {
+  text-wrap: balance;
+}
+.hero-sub, .page-hero p, .bio-intro,
+.card-excerpt, .lens-desc, .figure-excerpt,
+.spotlight-text, .newsletter-sub {
+  text-wrap: pretty;
+}
+
+/* ── Smoother interactive motion ──
+   Re-declares transitions on the cards/buttons using the new
+   easing + a touch more travel time for a refined feel. */
+.card, .lens-card, .figure-card, .spotlight, .timeline-card {
+  transition: transform .45s var(--ease-out),
+              box-shadow .45s var(--ease-out),
+              border-color .45s var(--ease-out);
+}
+.btn-primary, .btn-secondary, .btn-read,
+.newsletter-btn, .subscribe-btn, .filter-tab {
+  transition: transform .3s var(--ease-out),
+              box-shadow .3s var(--ease-out),
+              background .3s var(--ease-soft),
+              border-color .3s var(--ease-soft),
+              filter .3s var(--ease-soft);
+}
+
+/* ── Card top-accent reveal ──
+   A thin gold line that draws in across the top edge on hover.
+   Additive pseudo-element — does not affect layout. */
+.card, .figure-card, .timeline-card {
+  position: relative;
+}
+.card::before, .figure-card::before, .timeline-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .5s var(--ease-out);
+  z-index: 3;
+  pointer-events: none;
+}
+.card:hover::before,
+.figure-card:hover::before,
+.timeline-card:hover::before { transform: scaleX(1); }
+
+/* Slightly deeper, smoother lift */
+.card:hover        { transform: translateY(-7px); }
+.figure-card:hover { transform: translateY(-8px); }
+.lens-card:hover   { transform: translateY(-7px); }
+.timeline-card:hover { transform: translateY(-6px); }
+
+/* ── Image treatment: smoother zoom + gentle warmth on hover ── */
+.card-thumb img, .spotlight-portrait img, .figure-img img {
+  transition: transform .7s var(--ease-out), filter .5s var(--ease-soft);
+}
+.card:hover .card-thumb img,
+.spotlight:hover .spotlight-portrait img { filter: sepia(10%) contrast(1.06) brightness(1.02); }
+
+/* ── Button sheen sweep ──
+   A soft diagonal highlight that glides across gold buttons on hover. */
+.btn-primary, .btn-read, .newsletter-btn, .subscribe-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-primary::after, .btn-read::after,
+.newsletter-btn::after, .subscribe-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,249,236,.45), transparent);
+  transform: skewX(-18deg);
+  transition: left .6s var(--ease-out);
+  z-index: -1;
+  pointer-events: none;
+}
+.btn-primary:hover::after, .btn-read:hover::after,
+.newsletter-btn:hover::after, .subscribe-btn:hover::after { left: 130%; }
+
+/* ── Refined tag pills ── */
+.tag-pill {
+  transition: background .3s var(--ease-soft), border-color .3s var(--ease-soft), color .3s var(--ease-soft);
+}
+.tag-pill:hover {
+  background: rgba(184,134,11,.16);
+  border-color: var(--gold-border-strong);
+  color: var(--gold-dark);
+}
+
+/* ── Nav polish: springier underline + subtle logo lift ── */
+.nav-links a::after { transition: width .3s var(--ease-out); }
+.logo { transition: transform .3s var(--ease-out); display: inline-block; }
+.logo:hover { transform: translateY(-1px); }
+
+/* ── Eyebrow accent line grows a hair on section hover-in ── */
+.section-eyebrow { transition: letter-spacing .3s var(--ease-soft); }
+
+/* ── Newsletter + spotlight: refined focus glow already exists; add a
+     soft floating feel to the newsletter card border on hover ── */
+.newsletter { transition: box-shadow .5s var(--ease-out), border-color .5s var(--ease-out); }
+.newsletter:hover { border-color: var(--gold-border-strong); }
+
+/* ── Bio portraits: gentle interactive lift ── */
+.bio-portrait img {
+  transition: transform .5s var(--ease-out), box-shadow .5s var(--ease-out);
+}
+.bio-portrait img:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 5px rgba(184,134,11,.10), var(--shadow-xl);
+}
+
+/* ── Filter tab active/hover smoothing ── */
+.filter-tab:hover { transform: translateY(-1px); }
+
+/* ── Respect reduced motion: neutralise the added transforms ── */
+@media (prefers-reduced-motion: reduce) {
+  .card:hover, .figure-card:hover, .lens-card:hover,
+  .timeline-card:hover, .logo:hover, .bio-portrait img:hover,
+  .filter-tab:hover { transform: none; }
+  .card::before, .figure-card::before, .timeline-card::before { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTRO SECTION — editorial restyle
+   Scoped to the "Palace of Truth" block only.
+   Keeps the sand background + two-column grid; adds an
+   editorial finish. No background-colour change.
+══════════════════════════════════════════════════════════ */
+.intro-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Oversized, faint ✦ motif behind the statement (on-brand sparkle) */
+.intro-section::before {
+  content: "✦";
+  position: absolute;
+  top: -46px;
+  left: 1.5%;
+  font-family: var(--font-display);
+  font-size: clamp(200px, 27vw, 380px);
+  line-height: 1;
+  color: rgba(184,134,11,.055);
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+/* Keep real content above the motif */
+.intro-statement,
+.intro-body { position: relative; z-index: 1; }
+
+/* Gold kicker rule above the headline */
+.intro-statement {
+  font-size: clamp(32px, 4vw, 54px);
+}
+.intro-statement::before {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-mid));
+  margin-bottom: 30px;
+}
+
+/* Editorial column-rule + drop-cap on the body side */
+.intro-body { padding-left: 40px; }
+.intro-body::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--gold), transparent 88%);
+}
+.intro-body p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 68px;
+  line-height: .82;
+  padding: 6px 12px 0 0;
+  color: var(--gold-dark);
+}
+
+/* Arrow link with a sliding arrow + growing underline */
+.intro-body a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: none;
+  padding-bottom: 6px;
+  position: relative;
+}
+.intro-body a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 1.5px;
+  width: 100%;
+  background: var(--gold);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform .4s var(--ease-out);
+}
+.intro-body a:hover { opacity: 1; letter-spacing: 2px; color: var(--gold); }
+.intro-body a:hover::after { transform: scaleX(1.06); }
+.intro-body a .arrow {
+  display: inline-block;
+  transition: transform .35s var(--ease-out);
+}
+.intro-body a:hover .arrow { transform: translateX(5px); }
+
+/* Small screens: soften the motif, keep the rule tidy */
+@media (max-width: 1100px) {
+  .intro-section::before { font-size: 200px; top: -30px; opacity: .8; }
+  .intro-body { padding-left: 28px; }
+}
+@media (max-width: 560px) {
+  .intro-section::before { display: none; }
+  .intro-body p:first-of-type::first-letter { font-size: 54px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARDS SECTION — "Newly Added" editorial restyle
+   Scoped to .cards-section only. Keeps sand background + grid.
+   Adds: kicker tick before the tag, a unifying photo scrim,
+   title hover, and a "Read the story →" footer affordance.
+══════════════════════════════════════════════════════════ */
+
+/* Kicker tick before each tag (matches the intro rule) */
+.cards-section .card-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cards-section .card-tag::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* Soft warm scrim over the lower photo — unifies the mixed
+   colour/B&W portraits and adds depth */
+.cards-section .card-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 52%, rgba(44,33,21,.30));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Title warms to gold on hover */
+.cards-section .card-title { transition: color .3s var(--ease-soft); }
+.cards-section .card:hover .card-title { color: var(--gold-dark); }
+
+/* Give the excerpt a little breathing room before the CTA */
+.cards-section .card-excerpt { margin-bottom: 20px; }
+
+/* "Read the story" footer link — always present, brightens on hover */
+.cards-section .card-body { position: relative; }
+.cards-section .card-body::after {
+  content: "Read the story →";
+  display: block;
+  padding-top: 16px;
+  border-top: 1px solid var(--gold-border);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  transition: color .3s var(--ease-soft), letter-spacing .3s var(--ease-soft);
+}
+.cards-section .card:hover .card-body::after {
+  color: var(--gold-dark);
+  letter-spacing: 2.6px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   TIMELINE STRIP (index) — modern connected-rail restyle
+   Scoped to .timeline-section. Keeps sand background + the
+   horizontal scroll layout; adds a continuous gold rail with
+   node dots so it reads as a real timeline.
+══════════════════════════════════════════════════════════ */
+.timeline-section .timeline-strip {
+  padding-top: 6px;
+  align-items: stretch;      /* equal-height cards keep the rail level */
+}
+
+.timeline-section .timeline-card {
+  position: relative;
+  overflow: visible;         /* let the rail bridge the gap */
+  padding: 54px 24px 26px;   /* room up top for the rail + dot */
+  border-color: var(--gold-border);
+}
+
+/* Continuous rail — each card carries a segment that reaches
+   across the gap into the next card, forming one line. */
+.timeline-section .timeline-card::after {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: -22px;              /* == the flex gap, so segments join */
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-border-strong));
+  z-index: 0;
+}
+.timeline-section .timeline-card:first-child::after {
+  background: linear-gradient(90deg, transparent, var(--gold) 14%, var(--gold-border-strong));
+}
+.timeline-section .timeline-card:last-child::after {
+  right: 0;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+/* Node dot sitting on the rail, aligned with the year */
+.timeline-section .timeline-card::before {
+  content: "";
+  position: absolute;
+  top: 25px;
+  left: 24px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sand-1);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 0 4px var(--gold-pale);
+  transform: none;           /* override the generic top-accent from the polish layer */
+  transition: background .3s var(--ease-soft), box-shadow .3s var(--ease-soft);
+  z-index: 2;
+}
+
+/* Hover: fill the node + firm up the card, but DON'T lift
+   (lifting would break the continuous rail) */
+.timeline-section .timeline-card:hover {
+  transform: none;
+  border-color: var(--gold-border-strong);
+  box-shadow: var(--shadow-md);
+}
+.timeline-section .timeline-card:hover::before {
+  background: var(--gold);
+  box-shadow: 0 0 0 5px var(--gold-pale);
+}
+
+/* Year gets a touch more presence */
+.timeline-section .timeline-year {
+  font-size: 34px;
+  letter-spacing: -1.5px;
+  margin-bottom: 14px;
+}
+
+/* Small screens: keep the rail tidy */
+@media (max-width: 560px) {
+  .timeline-section .timeline-card { padding-top: 50px; }
+  .timeline-section .timeline-card::before { left: 22px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   LENS CARDS ("Six Lenses") — higher-visibility restyle
+   Scoped to .lenses-section. Sand page background unchanged;
+   cards get more definition + clearer hierarchy.
+══════════════════════════════════════════════════════════ */
+.lenses-section .lens-card {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 32px 34px;
+  /* Lighter surface so panels lift off the sand page */
+  background: linear-gradient(180deg, var(--sand-0) 0%, var(--sand-2) 100%);
+  border: 1px solid var(--gold-border-strong);
+  box-shadow: var(--shadow-md);
+}
+.lenses-section .lens-card:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Persistent gold top accent (brightens on hover) */
+.lenses-section .lens-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-mid));
+  opacity: .55;
+  transition: opacity .3s var(--ease-soft);
+  z-index: 1;
+}
+.lenses-section .lens-card:hover::before { opacity: 1; }
+
+/* Big, clearly-visible index numeral, top-right */
+.lenses-section .lens-num {
+  position: absolute;
+  top: 22px; right: 26px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: rgba(184,134,11,.30);
+}
+
+/* Icon in a visible gold chip */
+.lenses-section .lens-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  margin-bottom: 22px;
+  font-size: 26px;
+  background: var(--gold-pale);
+  border: 1px solid var(--gold-border-strong);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Stronger title + hover warmth */
+.lenses-section .lens-title {
+  font-size: 22px;
+  color: var(--ink-1);
+  transition: color .3s var(--ease-soft);
+}
+.lenses-section .lens-card:hover .lens-title { color: var(--gold-dark); }
+
+/* More legible description */
+.lenses-section .lens-desc {
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.72;
+}
+
+/* Article count as a visible pill */
+.lenses-section .lens-count {
+  display: inline-block;
+  padding: 6px 13px;
+  border: 1px solid var(--gold-border-strong);
+  border-radius: 999px;
+  background: var(--gold-pale);
+  color: var(--gold-dark);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SPOTLIGHT CAROUSEL — modern featured-story restyle
+   Scoped to .spotlight-section / carousel controls.
+   Sand background + layout unchanged.
+══════════════════════════════════════════════════════════ */
+
+/* "Featured" badge on the portrait */
+.spotlight-section .spotlight-portrait { position: relative; }
+.spotlight-section .spotlight-portrait::before {
+  content: "★ Featured";
+  position: absolute;
+  top: 16px; left: 16px;
+  z-index: 3;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--btn-text);
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-mid) 100%);
+  padding: 7px 13px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(184,134,11,.35);
+}
+
+/* Soft scrim for depth + photo cohesion */
+.spotlight-section .spotlight-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 55%, rgba(44,33,21,.34));
+}
+
+/* Gold kicker tick on the date line (matches the other sections) */
+.spotlight-section .spotlight-dates {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.spotlight-section .spotlight-dates::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ── Carousel controls: gold-fill on hover for clearer affordance ── */
+.spot-btn { border-color: var(--gold-border-strong); }
+.spot-btn:hover {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-mid) 100%);
+  color: var(--btn-text);
+  border-color: var(--gold);
+}
+/* Slightly more visible inactive dots */
+.spot-dot { background: var(--gold-border-strong); }
+.spot-dot:hover { background: var(--gold-mid); }
+
+/* ══════════════════════════════════════════════════════════
+   BIO / PEOPLE PAGES — modern polish (shared, all six pages)
+   Sand background + layout unchanged.
+══════════════════════════════════════════════════════════ */
+
+/* Reading-progress bar (added by script.js only on article pages) */
+.reading-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-mid));
+  z-index: 300;                 /* above the navbar */
+  pointer-events: none;
+  transition: width .1s linear;
+}
+
+/* Gold kicker tick before the dates (matches the rest of the site) */
+.bio-dates { display: inline-flex; align-items: center; gap: 10px; }
+.bio-dates::before {
+  content: "";
+  width: 22px; height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+}
+
+/* Section-heading accent sitting on the top rule */
+.bio-article h2 { position: relative; }
+.bio-article h2::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: 0;
+  width: 44px; height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-mid));
+}
+.bio-article h2:first-child::before { display: none; }
+
+/* Editorial drop-cap on the first paragraph */
+.bio-article > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 70px;
+  line-height: .8;
+  padding: 8px 12px 0 0;
+  color: var(--gold-dark);
+}
+
+/* Pullquote: large gold quote mark + a bit more room */
+.bio-pullquote { position: relative; padding-top: 30px; }
+.bio-pullquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -8px; left: 18px;
+  font-family: var(--font-display);
+  font-size: 82px;
+  line-height: 1;
+  color: var(--gold);
+  opacity: .26;
+  pointer-events: none;
+}
+
+/* Footer nav: names slide on hover */
+.bio-nav-name { display: inline-block; transition: color .2s ease, transform .3s var(--ease-out); }
+.bio-nav-prev a:hover .bio-nav-name { transform: translateX(-3px); }
+.bio-nav-next a:hover .bio-nav-name { transform: translateX(3px); }
+
+@media (max-width: 560px) {
+  .bio-article > p:first-of-type::first-letter { font-size: 56px; }
+}

@@ -176,7 +176,7 @@
     <div class="intro-body">
       <p>The equations in your physics textbook were written by someone history forgot. The computer that won World War II was built by a man sworn to secrecy for thirty years. The fossils that proved extinction was real were found by a working-class woman whose name never appeared in the papers.</p>
       <p>AskWhy.fyi is dedicated to the people whose work shaped the modern world — and the structures that let us forget them.</p>
-      <a href="hidden-figures.html">Meet the pioneers →</a>
+      <a href="hidden-figures.html">Meet the pioneers <span class="arrow">→</span></a>
     </div>
   </section>
 
@@ -534,7 +534,7 @@
     </div>
     <div class="footer-bottom">
       <span>© 2025 AskWhy.fyi — Accuracy first, narrative second.</span>
-      <span>A digital museum</span>
+      <span>For More inquries kindly email us in citizen.kincaid@gmail.com</span>
     </div>
   </footer>
 
@@ -544,6 +544,16 @@
     const canvas = document.getElementById('heroCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
+    let t = 0;
+
+    // Same gold as before — colours are unchanged.
+    const STAR = '140,100,30';
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Cursor tracking (canvas has pointer-events:none, so we read from window
+    // and translate into canvas-local coordinates).
+    const pointer = { x: -9999, y: -9999, active: false };
+    const RADIUS = 130;           // how close the cursor's pull/lines reach
 
     function resize() {
       const left = canvas.parentElement;
@@ -562,25 +572,82 @@
           alpha: Math.random() * 0.28 + 0.06,
           vx: (Math.random() - 0.5) * 0.2,
           vy: (Math.random() - 0.5) * 0.2,
+          tw: Math.random() * Math.PI * 2,        // twinkle phase
         });
       }
     }
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.016;
+
+      // Soft gold glow that follows the cursor — makes the field feel alive.
+      if (pointer.active) {
+        const glow = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, RADIUS);
+        glow.addColorStop(0, `rgba(${STAR},0.08)`);
+        glow.addColorStop(1, `rgba(${STAR},0)`);
+        ctx.fillStyle = glow;
+        ctx.fillRect(pointer.x - RADIUS, pointer.y - RADIUS, RADIUS * 2, RADIUS * 2);
+      }
+
       particles.forEach(p => {
+        // Gentle twinkle on the brightness.
+        const tw = reduceMotion ? p.alpha : p.alpha + Math.sin(t * 1.5 + p.tw) * 0.05;
+
+        // Cursor pull — stars near the pointer drift toward it a touch,
+        // so the galaxy "moves with" the cursor.
+        if (pointer.active && !reduceMotion) {
+          const dx = pointer.x - p.x;
+          const dy = pointer.y - p.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < RADIUS && dist > 0.5) {
+            const force = (1 - dist / RADIUS) * 0.6;
+            p.x += (dx / dist) * force;
+            p.y += (dy / dist) * force;
+
+            // Faint constellation line from the star to the cursor.
+            ctx.strokeStyle = `rgba(${STAR},${(1 - dist / RADIUS) * 0.14})`;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(pointer.x, pointer.y);
+            ctx.stroke();
+          }
+        }
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(140,100,30,${p.alpha})`;
+        ctx.fillStyle = `rgba(${STAR},${Math.max(0.04, tw)})`;
         ctx.fill();
+
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
       });
+
       requestAnimationFrame(draw);
     }
+
+    function updatePointer(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        pointer.x = x; pointer.y = y; pointer.active = true;
+      } else {
+        pointer.active = false;
+      }
+    }
+
+    window.addEventListener('mousemove', e => updatePointer(e.clientX, e.clientY));
+    window.addEventListener('mouseout', () => { pointer.active = false; });
+    // Touch: let the field respond to a finger drag too.
+    window.addEventListener('touchmove', e => {
+      if (e.touches[0]) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('touchend', () => { pointer.active = false; });
 
     resize(); init(); draw();
     window.addEventListener('resize', () => { resize(); init(); });

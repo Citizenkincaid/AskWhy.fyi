@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -33,7 +33,7 @@
         font-family: var(--font-display);
         font-size: clamp(48px, 6vw, 80px);
         font-weight: 700;
-        color: var(--white);
+        color: var(--ink-1);
         line-height: 1.05;
         letter-spacing: -2px;
         margin: 16px 0 24px;
@@ -42,7 +42,7 @@
       .timeline-hero p {
         font-family: var(--font-serif);
         font-size: 19px;
-        color: var(--text-body);
+        color: var(--ink-2);
         line-height: 1.65;
         max-width: 520px;
       }
@@ -62,7 +62,7 @@
         font-size: 12px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        color: var(--text-muted);
+        color: var(--ink-3);
       }
 
       /* ── Main timeline layout ── */
@@ -74,10 +74,10 @@
       /* Central spine */
       .timeline-spine {
         position: absolute;
-        left: calc(8% + 180px);
+        left: calc(8% + 220px);
         top: 0; bottom: 0;
-        width: 1px;
-        background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+        width: 2px;
+        background: linear-gradient(to bottom, transparent, var(--gold-border-strong) 4%, var(--gold-border-strong) 96%, transparent);
       }
 
       /* Each row */
@@ -118,9 +118,9 @@
       .tl-dot {
         width: 14px; height: 14px;
         border-radius: 50%;
-        background: var(--navy);
+        background: var(--sand-1);
         border: 2px solid var(--gold);
-        box-shadow: 0 0 0 4px rgba(201,168,76,.12), 0 0 16px rgba(201,168,76,.3);
+        box-shadow: 0 0 0 4px rgba(184,134,11,.12);
         flex-shrink: 0;
         transition: box-shadow .3s;
         position: relative;
@@ -128,7 +128,7 @@
       }
 
       .tl-item:hover .tl-dot {
-        box-shadow: 0 0 0 6px rgba(201,168,76,.18), 0 0 24px rgba(201,168,76,.5);
+        box-shadow: 0 0 0 6px rgba(184,134,11,.18);
         background: var(--gold);
       }
 
@@ -139,17 +139,30 @@
       }
 
       .tl-card {
-        background: var(--navy-card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 32px 36px;
-        transition: border-color .3s, box-shadow .3s, transform .3s;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--sand-0) 0%, var(--sand-2) 100%);
+        border: 1px solid var(--gold-border-strong);
+        border-radius: 16px;
+        padding: 30px 36px;
+        box-shadow: var(--shadow-md);
+        transition: border-color .35s, box-shadow .35s, transform .35s;
       }
+      .tl-card::before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, var(--gold), var(--gold-mid));
+        opacity: .55;
+        transition: opacity .3s ease;
+      }
+      .tl-item:hover .tl-card::before { opacity: 1; }
 
       .tl-item:hover .tl-card {
-        border-color: rgba(201,168,76,.35);
-        box-shadow: 0 16px 48px rgba(0,0,0,.45);
-        transform: translateX(4px);
+        border-color: var(--gold);
+        box-shadow: var(--shadow-lg);
+        transform: translateX(5px);
       }
 
       .tl-category {
@@ -165,16 +178,18 @@
         font-family: var(--font-display);
         font-size: 22px;
         font-weight: 700;
-        color: var(--white);
+        color: var(--ink-1);
         line-height: 1.25;
         margin-bottom: 14px;
         letter-spacing: -.3px;
+        transition: color .3s ease;
       }
+      .tl-item:hover .tl-title { color: var(--gold-dark); }
 
       .tl-text {
         font-family: var(--font-serif);
         font-size: 16px;
-        color: var(--text-body);
+        color: var(--ink-2);
         line-height: 1.75;
         margin-bottom: 0;
       }
@@ -207,18 +222,18 @@
       }
 
       .tl-era-label {
-        font-size: 10px;
-        font-weight: 600;
+        font-size: 11px;
+        font-weight: 700;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: var(--text-muted);
+        color: var(--gold-dark);
         white-space: nowrap;
       }
 
       .tl-era-line {
         flex: 1;
         height: 1px;
-        background: var(--border);
+        background: linear-gradient(90deg, var(--gold-border-strong), transparent);
       }
 
       /* Category colour dots on card */
@@ -237,7 +252,7 @@
       .cat-naval    { background: #9e7d35; }
 
       @media (max-width: 900px) {
-        .timeline-spine { left: 6%; }
+        .timeline-spine { left: calc(6% + 94px); }
         .tl-item { grid-template-columns: 70px 48px 1fr; }
         .tl-year { font-size: 22px; }
         .tl-content { padding-left: 20px; }
@@ -283,11 +298,11 @@
     <!-- Controls -->
     <div class="timeline-controls">
       <div class="filter-tabs" style="margin:0;">
-        <button class="filter-tab active">All</button>
-        <button class="filter-tab">Innovation</button>
-        <button class="filter-tab">Science</button>
-        <button class="filter-tab">Medicine</button>
-        <button class="filter-tab">Exploration</button>
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="innovation">Innovation</button>
+        <button class="filter-tab" data-filter="science">Science</button>
+        <button class="filter-tab" data-filter="medicine">Medicine</button>
+        <button class="filter-tab" data-filter="exploration">Exploration</button>
       </div>
       <span class="timeline-count">7 entries</span>
     </div>
@@ -302,7 +317,7 @@
         <div class="tl-era-line"></div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="science">
         <div class="tl-year">1799</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -315,7 +330,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="exploration">
         <div class="tl-year">1809</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -327,7 +342,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="medicine">
         <div class="tl-year">1836</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -340,7 +355,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="innovation">
         <div class="tl-year">1885</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -359,7 +374,7 @@
         <div class="tl-era-line"></div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="science">
         <div class="tl-year">1938</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -371,7 +386,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="innovation">
         <div class="tl-year">1943</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -384,7 +399,7 @@
         </div>
       </div>
 
-      <div class="tl-item">
+      <div class="tl-item" data-cat="medicine">
         <div class="tl-year">1972</div>
         <div class="tl-node-col"><div class="tl-dot"></div></div>
         <div class="tl-content">
@@ -442,6 +457,39 @@
         });
       }, { threshold: 0.1 });
       items.forEach(el => io.observe(el));
+
+      // ── Category filtering ──
+      const tabs   = document.querySelectorAll('.timeline-controls .filter-tab');
+      const allItems = Array.from(document.querySelectorAll('.timeline-main .tl-item'));
+      const eras   = Array.from(document.querySelectorAll('.timeline-main .tl-era'));
+      const countEl = document.querySelector('.timeline-count');
+
+      function applyFilter(cat) {
+        let visible = 0;
+        allItems.forEach(it => {
+          const show = cat === 'all' || it.dataset.cat === cat;
+          it.style.display = show ? '' : 'none';
+          if (show) { it.classList.add('visible'); visible++; }
+        });
+        // Hide an era header when nothing under it is showing
+        eras.forEach(era => {
+          let n = 0, el = era.nextElementSibling;
+          while (el && !el.classList.contains('tl-era')) {
+            if (el.classList.contains('tl-item') && el.style.display !== 'none') n++;
+            el = el.nextElementSibling;
+          }
+          era.style.display = n > 0 ? '' : 'none';
+        });
+        if (countEl) countEl.textContent = visible + (visible === 1 ? ' entry' : ' entries');
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          applyFilter(tab.dataset.filter || 'all');
+        });
+      });
     </script>
   </body>
   </html>
